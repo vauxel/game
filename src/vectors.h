@@ -2,11 +2,11 @@
 #define _VECTORS_H_
 
 typedef struct Vector3 {
-	float x;
-	float y;
-	float z;
+	double x;
+	double y;
+	double z;
 
-	Vector3(float x, float y, float z) : x(x), y(y), z(z) {};
+	Vector3(double x, double y, double z) : x(x), y(y), z(z) {};
 	Vector3() : x(0.0f), y(0.0f), z(0.0f) {};
 
 	friend bool operator == (const Vector3&, const Vector3&);
@@ -17,26 +17,26 @@ typedef struct Vector3 {
 	friend bool operator >= (const Vector3&, const Vector3&);
 
 	friend Vector3 operator + (Vector3&, const Vector3&);
-	friend Vector3 operator + (Vector3&, const float);
+	friend Vector3 operator + (Vector3&, const double);
 	
 	friend Vector3 operator - (Vector3&, const Vector3&);
-	friend Vector3 operator - (Vector3&, const float);
+	friend Vector3 operator - (Vector3&, const double);
 
 	friend Vector3& operator += (Vector3&, const Vector3&);
-	friend Vector3& operator += (Vector3&, const float);
+	friend Vector3& operator += (Vector3&, const double);
 
 	friend Vector3& operator -= (Vector3&, const Vector3&);
-	friend Vector3& operator -= (Vector3&, const float);
+	friend Vector3& operator -= (Vector3&, const double);
 
-	friend Vector3 operator * (Vector3&, const float);
-	friend Vector3& operator *= (Vector3&, const float);
+	friend Vector3 operator * (Vector3&, const double);
+	friend Vector3& operator *= (Vector3&, const double);
 
-	friend Vector3 operator / (Vector3&, const float);
-	friend Vector3& operator /= (Vector3&, const float);
+	friend Vector3 operator / (Vector3&, const double);
+	friend Vector3& operator /= (Vector3&, const double);
 
-	float dot(const Vector3& v1);
+	double dot(const Vector3& v1);
 	Vector3 cross(const Vector3& v1);
-	float magnitude();
+	double magnitude();
 	void normalize();
 } Vector3;
 
