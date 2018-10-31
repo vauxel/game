@@ -1,16 +1,20 @@
-CXX      := g++
-CXXFLAGS := -g -Wall
-LDFLAGS  := -Llib/ -lglfw -lGL
-BUILD    := ./build
-OBJ_DIR  := $(BUILD)/objects
-APP_DIR  := $(BUILD)
-TARGET   := game
-INCLUDE  := -Iinclude/ -Isrc/
-SRC      := $(wildcard src/*.cpp)
+CXX			:= g++
+CXXFLAGS	:= -g -Wall
+LDFLAGS		:= -Llib/ -lglfw -lGL
+BUILD		:= ./build
+OBJ_DIR		:= $(BUILD)/objects
+APP_DIR		:= $(BUILD)
+TARGET		:= game
+TEST_TARGET	:= test
+INCLUDE		:= -Iinclude/ -Isrc/
+SRC			:= $(wildcard src/*.cpp)
+TEST		:= $(wildcard test/*.cpp)
 
 OBJECTS := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
+TEST_OBJECTS := $(TEST:%.cpp=$(OBJ_DIR)/%.o)
 
 all: build $(APP_DIR)/$(TARGET)
+test: build $(APP_DIR)/$(TEST_TARGET)
 
 $(OBJ_DIR)/%.o: %.cpp
 	@mkdir -p $(@D)
@@ -19,6 +23,10 @@ $(OBJ_DIR)/%.o: %.cpp
 $(APP_DIR)/$(TARGET): $(OBJECTS)
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $(APP_DIR)/$(TARGET) $(OBJECTS)
+
+$(APP_DIR)/$(TEST_TARGET): $(TEST_OBJECTS)
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $(APP_DIR)/$(TEST_TARGET) $(filter-out $(OBJ_DIR)/src/main.o, $(OBJECTS)) $(TEST_OBJECTS)
 
 .PHONY: all build clean
 
