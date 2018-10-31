@@ -33,6 +33,11 @@ typedef struct Vector3 {
 
 	friend Vector3 operator / (Vector3&, const float);
 	friend Vector3& operator /= (Vector3&, const float);
+
+	float dot(const Vector3& v1);
+	Vector3 cross(const Vector3& v1);
+	float magnitude();
+	void normalize();
 } Vector3;
 
 #endif
