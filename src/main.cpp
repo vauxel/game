@@ -1,12 +1,12 @@
 #include "game.h"
 
 int main(void) {
-    Game* game = new Game();
-    
-    if(game->initialized) {
-        game->loop();
-    }
+	Game* game = Game::instance();
+	game->init();
 
-    delete game;
+	if(game->initialized) {
+		game->loop();
+	}
+
 	return 0;
 }

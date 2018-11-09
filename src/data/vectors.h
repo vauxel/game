@@ -1,13 +1,15 @@
 #ifndef _VECTORS_H_
 #define _VECTORS_H_
 
+#include <math.h>
+
 typedef struct Vector3 {
 	double x;
 	double y;
 	double z;
 
 	Vector3(double x, double y, double z) : x(x), y(y), z(z) {};
-	Vector3() : x(0.0f), y(0.0f), z(0.0f) {};
+	Vector3() : x(0.0), y(0.0), z(0.0) {};
 
 	friend bool operator == (const Vector3&, const Vector3&);
 	friend bool operator != (const Vector3&, const Vector3&);

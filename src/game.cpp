@@ -1,44 +1,63 @@
-#include <GLFW/glfw3.h>
 #include "game.h"
 
-Game::Game() {
-    initGLFW();
-}
+Game* Game::_instance = 0;
+Game::Game() {}
 
 Game::~Game() {
-    if(window) {
-        glfwTerminate();
-    }
+	if(window) {
+		glfwTerminate();
+	}
+}
+
+Game* Game::instance() {
+	if(_instance == 0) {
+		_instance = new Game();
+	}
+
+	return _instance;
+}
+
+void Game::init() {
+	initGLFW();
+	entityManager = EntityManager::instance();
+	renderSystem = new RenderSystem(window);
+	glfwSetKeyCallback(window, handleInput);
 }
 
 void Game::initGLFW() {
-    /* Initialize the library */
-    if(!glfwInit()) {
-        return;
+	glfwSetErrorCallback(handleGLFWError);
+
+	if(!glfwInit()) {
+		return;
 	}
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Test Game", NULL, NULL);
-    if(!window) {
-        glfwTerminate();
-        return;
-    }
+	window = glfwCreateWindow(640, 480, "Test Game", NULL, NULL);
+	if(!window) {
+		glfwTerminate();
+		return;
+	}
 
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(window);
 
-    initialized = true;
+	initialized = true;
+	running = !glfwWindowShouldClose(window);
 }
 
 void Game::loop() {
-    while(!glfwWindowShouldClose(window)) {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+	while(running) {
+		renderSystem->loop();
+		
+		glfwPollEvents();
+		running = !glfwWindowShouldClose(window);
+	}
+}
 
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
+void Game::handleInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window, GLFW_TRUE);
+	}
+}
 
-        /* Poll for and process events */
-        glfwPollEvents();
-    }
+void Game::handleGLFWError(int error, const char* description) {
+	fprintf(stderr, "GLFW Error: %s\n", description);
 }

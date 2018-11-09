@@ -7,7 +7,7 @@ APP_DIR		:= $(BUILD)
 TARGET		:= game
 TEST_TARGET	:= test
 INCLUDE		:= -Iinclude/ -Isrc/
-SRC			:= $(wildcard src/*.cpp)
+SRC			:= $(shell find src -name '*.cpp')
 TEST		:= $(wildcard test/*.cpp)
 
 OBJECTS := $(SRC:%.cpp=$(OBJ_DIR)/%.o)

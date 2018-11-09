@@ -1,5 +1,5 @@
 #include "catch2/catch.h"
-#include "vectors.h"
+#include "data/vectors.h"
 
 TEST_CASE("testing vector operations", "[vectors]") {
     Vector3 v1(2.0, 6.0, 9.0);

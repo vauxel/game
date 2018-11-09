@@ -1,4 +1,3 @@
-#include <math.h>
 #include "vectors.h"
 
 bool operator == (const Vector3& v1, const Vector3& v2) {
