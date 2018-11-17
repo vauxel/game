@@ -1,6 +1,6 @@
 CXX			:= g++
 CXXFLAGS	:= -g -Wall
-LDFLAGS		:= -Llib/ -lglfw -lGL
+LDFLAGS		:= -Llib/ -lGL -lGLU -lGLEW -lglfw
 BUILD		:= ./build
 OBJ_DIR		:= $(BUILD)/objects
 APP_DIR		:= $(BUILD)

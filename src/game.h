@@ -1,8 +1,10 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+#include "resources/resource.h"
 #include "systems/render.h"
 #include "entities/entity.h"
 
@@ -10,6 +12,7 @@ class Game {
 	private:
 		static Game* _instance;
 		bool running = false;
+		ResourceManager* resourceManager;
 		EntityManager* entityManager;
 		RenderSystem* renderSystem;
 		GLFWwindow* window;

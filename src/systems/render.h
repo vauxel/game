@@ -1,7 +1,9 @@
 #ifndef _RENDERSYSTEM_H_
 #define _RENDERSYSTEM_H_
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "data/vectors.h"
 #include "system.h"
 
 class RenderSystem : public System {
@@ -13,7 +15,6 @@ class RenderSystem : public System {
 
 		virtual void attachEntity(Entity* entity);
         virtual void loop();
-		void render();
 };
 
 #endif

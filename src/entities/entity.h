@@ -3,20 +3,31 @@
 
 #include <vector>
 #include "systems/system.h"
+#include "comp/spatial.h"
+#include "comp/model.h"
 
 class System;
 
+enum EntityFlags {
+	NONE = 0x00,
+	RENDERABLE = 0x01,
+	CONTROLLABLE = 0x02
+};
+
 class Entity {
 	public:
-		int flags = 0;
-		virtual ~Entity() {};
+		int entityId;
+
+		virtual unsigned int flags() { return EntityFlags::NONE; }
+		virtual Spatial* spatial() { return nullptr; }
+		virtual Model* model() { return nullptr; }
 };
 
 class EntityManager {
 	private:
 		static EntityManager* _instance;
-
-		std::vector<Entity*> entities;
+		
+		int lastEntityId = 0;
 		std::vector<System*> systems;
 
 		EntityManager();
@@ -27,48 +38,12 @@ class EntityManager {
 		template<typename T>
 		T* spawn() {
 			T* entity = new T();
-			entities.push_back(entity);
+			entity->entityId = ++lastEntityId;
 			attachToSystems(entity);
 			return entity;
 		}
 
 		void registerSystem(System* system);
 };
-
-enum EntityFlags : int {
-	RENDERABLE = (1 << 0),
-	CONTROLLABLE = (1 << 1),
-};
-
-inline constexpr EntityFlags operator&(EntityFlags x, EntityFlags y) {
-	return static_cast<EntityFlags>(static_cast<int>(x) & static_cast<int>(y));
-}
-
-inline constexpr EntityFlags operator|(EntityFlags x, EntityFlags y) {
-	return static_cast<EntityFlags>(static_cast<int>(x) | static_cast<int>(y));
-}
-
-inline constexpr EntityFlags operator^(EntityFlags x, EntityFlags y) {
-	return static_cast<EntityFlags>(static_cast<int>(x) ^ static_cast<int>(y));
-}
-
-inline constexpr EntityFlags operator~(EntityFlags x) {
-	return static_cast<EntityFlags>(~static_cast<int>(x));
-}
-
-inline EntityFlags &operator&=(EntityFlags& x, EntityFlags y) {
-	x = x & y;
-	return x;
-}
-
-inline EntityFlags &operator|=(EntityFlags& x, EntityFlags y) {
-	x = x | y;
-	return x;
-}
-
-inline EntityFlags &operator^=(EntityFlags& x, EntityFlags y) {
-	x = x ^ y;
-	return x;
-}
 
 #endif

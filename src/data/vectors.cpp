@@ -1,5 +1,95 @@
 #include "vectors.h"
 
+bool operator == (const Vector2& v1, const Vector2& v2) {
+	return (v1.x == v2.x) && (v1.y == v2.y);
+}
+
+bool operator != (const Vector2& v1, const Vector2& v2) {
+	return !(v1 == v2);
+}
+
+bool operator < (const Vector2& v1, const Vector2& v2) {
+	return (v1.x < v2.x) && (v1.y < v2.y);
+}
+
+bool operator > (const Vector2& v1, const Vector2& v2) {
+	return (v1.x > v2.x) && (v1.y > v2.y);
+}
+
+bool operator <= (const Vector2& v1, const Vector2& v2) {
+	return (v1.x <= v2.x) && (v1.y <= v2.y);
+}
+
+bool operator >= (const Vector2& v1, const Vector2& v2) {
+	return (v1.x >= v2.x) && (v1.y >= v2.y);
+}
+
+Vector2 operator + (Vector2& v1, const Vector2& v2) {
+	return Vector2(v1.x + v2.x, v1.y + v2.y);
+}
+
+Vector2 operator + (Vector2& v1, const double f1) {
+	return Vector2(v1.x + f1, v1.y + f1);
+}
+
+Vector2 operator - (Vector2& v1, const Vector2& v2) {
+	return Vector2(v1.x - v2.x, v1.y - v2.y);
+}
+
+Vector2 operator - (Vector2& v1, const double f1) {
+	return Vector2(v1.x - f1, v1.y - f1);
+}
+
+Vector2& operator += (Vector2& v1, const Vector2& v2) {
+	v1.x += v2.x; v1.y += v2.y;
+	return v1;
+}
+
+Vector2& operator -= (Vector2& v1, const Vector2& v2) {
+	v1.x -= v2.x; v1.y -= v2.y;
+	return v1;
+}
+
+Vector2& operator += (Vector2& v1, const double f1) {
+	v1.x += f1; v1.y += f1;
+	return v1;
+}
+
+Vector2& operator -= (Vector2& v1, const double f1) {
+	v1.x -= f1; v1.y -= f1;
+	return v1;
+}
+
+Vector2 operator * (Vector2& v1, const double f1) {
+	return Vector2(v1.x * f1, v1.y * f1);
+}
+
+Vector2& operator *= (Vector2& v1, const double f1) {
+	v1.x *= f1; v1.y *= f1;
+	return v1;
+}
+
+Vector2 operator / (Vector2& v1, const double f1) {
+	return Vector2(v1.x / f1, v1.y / f1);
+}
+
+Vector2& operator /= (Vector2& v1, const double f1) {
+	v1.x /= f1; v1.y /= f1;
+	return v1;
+}
+
+double Vector2::dot(const Vector2& v1) {
+	return (x * v1.x) + (y * v1.y);
+}
+
+double Vector2::magnitude() {
+	return sqrt(x * x + y * y);
+}
+
+void Vector2::normalize() {
+	*this /= magnitude();
+}
+
 bool operator == (const Vector3& v1, const Vector3& v2) {
 	return (v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z);
 }

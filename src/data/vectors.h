@@ -3,6 +3,43 @@
 
 #include <math.h>
 
+typedef struct Vector2 {
+	double x;
+	double y;
+
+	Vector2(double x, double y) : x(x), y(y) {};
+	Vector2() : x(0.0), y(0.0) {};
+
+	friend bool operator == (const Vector2&, const Vector2&);
+	friend bool operator != (const Vector2&, const Vector2&);
+	friend bool operator < (const Vector2&, const Vector2&);
+	friend bool operator > (const Vector2&, const Vector2&);
+	friend bool operator <= (const Vector2&, const Vector2&);
+	friend bool operator >= (const Vector2&, const Vector2&);
+
+	friend Vector2 operator + (Vector2&, const Vector2&);
+	friend Vector2 operator + (Vector2&, const double);
+	
+	friend Vector2 operator - (Vector2&, const Vector2&);
+	friend Vector2 operator - (Vector2&, const double);
+
+	friend Vector2& operator += (Vector2&, const Vector2&);
+	friend Vector2& operator += (Vector2&, const double);
+
+	friend Vector2& operator -= (Vector2&, const Vector2&);
+	friend Vector2& operator -= (Vector2&, const double);
+
+	friend Vector2 operator * (Vector2&, const double);
+	friend Vector2& operator *= (Vector2&, const double);
+
+	friend Vector2 operator / (Vector2&, const double);
+	friend Vector2& operator /= (Vector2&, const double);
+
+	double dot(const Vector2& v1);
+	double magnitude();
+	void normalize();
+} Vector2;
+
 typedef struct Vector3 {
 	double x;
 	double y;
