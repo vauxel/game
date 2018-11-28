@@ -2,13 +2,13 @@
 #define _SPATIAL_H_
 
 #include "data/vectors.h"
-#include "data/euler.h"
+#include "data/quaternion.h"
 
 typedef struct Spatial {
 	Vector3 position;
-	Euler3 rotation;
+	Quaternion rotation;
 	Vector3 velocity;
-	Euler3 angularVel;
+	Quaternion angularVel;
 } Spatial;
 
 #endif

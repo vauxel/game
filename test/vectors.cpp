@@ -2,82 +2,126 @@
 #include "data/vectors.h"
 
 TEST_CASE("testing vector operations", "[vectors]") {
-    Vector3 v1(2.0, 6.0, 9.0);
-    Vector3 v2(4.0, 4.0, 4.0);
+    Vector2 v2_1(3.0, 4.0);
+    Vector2 v2_2(4.0, 4.0);
+
+    Vector3 v3_1(2.0, 6.0, 9.0);
+    Vector3 v3_2(4.0, 4.0, 4.0);
     
-    SECTION("vector magnitude") { 
-        REQUIRE(v1.magnitude() == 11.0);
+    SECTION("vector magnitude") {
+        REQUIRE(v2_1.magnitude() == 5.0);
+        REQUIRE(v3_1.magnitude() == 11.0);
     }
 
     SECTION("adding two vectors") {
-        Vector3 v3 = v1 + v2;
-        Vector3 v4 = v2 + 1.0;
+        Vector2 v2_3 = v2_1 + v2_2;
+        Vector2 v2_4 = v2_2 + 1.0;
         
-        REQUIRE(v3.x == (v1.x + v2.x));
-        REQUIRE(v3.y == (v1.y + v2.y));
-        REQUIRE(v3.z == (v1.z + v2.z));
+        REQUIRE(v2_3.x == (v2_1.x + v2_2.x));
+        REQUIRE(v2_3.y == (v2_1.y + v2_2.y));
 
-        REQUIRE(v4.x == (v2.x + 1.0));
-        REQUIRE(v4.y == (v2.y + 1.0));
-        REQUIRE(v4.z == (v2.z + 1.0));
+        REQUIRE(v2_4.x == (v2_2.x + 1.0));
+        REQUIRE(v2_4.y == (v2_2.y + 1.0));
+
+        Vector3 v3_3 = v3_1 + v3_2;
+        Vector3 v3_4 = v3_2 + 1.0;
+        
+        REQUIRE(v3_3.x == (v3_1.x + v3_2.x));
+        REQUIRE(v3_3.y == (v3_1.y + v3_2.y));
+        REQUIRE(v3_3.z == (v3_1.z + v3_2.z));
+
+        REQUIRE(v3_4.x == (v3_2.x + 1.0));
+        REQUIRE(v3_4.y == (v3_2.y + 1.0));
+        REQUIRE(v3_4.z == (v3_2.z + 1.0));
     }
 
     SECTION("subtracting two vectors") {
-        Vector3 v3 = v1 - v2;
-        Vector3 v4 = v2 - 1.0;
+        Vector2 v2_3 = v2_1 - v2_2;
+        Vector2 v2_4 = v2_2 - 1.0;
         
-        REQUIRE(v3.x == (v1.x - v2.x));
-        REQUIRE(v3.y == (v1.y - v2.y));
-        REQUIRE(v3.z == (v1.z - v2.z));
+        REQUIRE(v2_3.x == (v2_1.x - v2_2.x));
+        REQUIRE(v2_3.y == (v2_1.y - v2_2.y));
 
-        REQUIRE(v4.x == (v2.x - 1.0));
-        REQUIRE(v4.y == (v2.y - 1.0));
-        REQUIRE(v4.z == (v2.z - 1.0));
+        REQUIRE(v2_4.x == (v2_2.x - 1.0));
+        REQUIRE(v2_4.y == (v2_2.y - 1.0));
+
+        Vector3 v3_3 = v3_1 - v3_2;
+        Vector3 v3_4 = v3_2 - 1.0;
+        
+        REQUIRE(v3_3.x == (v3_1.x - v3_2.x));
+        REQUIRE(v3_3.y == (v3_1.y - v3_2.y));
+        REQUIRE(v3_3.z == (v3_1.z - v3_2.z));
+
+        REQUIRE(v3_4.x == (v3_2.x - 1.0));
+        REQUIRE(v3_4.y == (v3_2.y - 1.0));
+        REQUIRE(v3_4.z == (v3_2.z - 1.0));
     }
 
     SECTION("scaling a vector (multiplication)") {
-        Vector3 v3 = v1 * 2.0;
+        Vector2 v2_3 = v2_1 * 2.0;
         
-        REQUIRE(v3.x == (v1.x * 2.0));
-        REQUIRE(v3.y == (v1.y * 2.0));
-        REQUIRE(v3.z == (v1.z * 2.0));
+        REQUIRE(v2_3.x == (v2_1.x * 2.0));
+        REQUIRE(v2_3.y == (v2_1.y * 2.0));
+
+        Vector3 v3_3 = v3_1 * 2.0;
+        
+        REQUIRE(v3_3.x == (v3_1.x * 2.0));
+        REQUIRE(v3_3.y == (v3_1.y * 2.0));
+        REQUIRE(v3_3.z == (v3_1.z * 2.0));
     }
 
     SECTION("scaling a vector (division)") {
-        Vector3 v3 = v1 / 2.0;
+        Vector2 v2_3 = v2_1 / 2.0;
         
-        REQUIRE(v3.x == (v1.x / 2.0));
-        REQUIRE(v3.y == (v1.y / 2.0));
-        REQUIRE(v3.z == (v1.z / 2.0));
+        REQUIRE(v2_3.x == (v2_1.x / 2.0));
+        REQUIRE(v2_3.y == (v2_1.y / 2.0));
+
+        Vector3 v3_3 = v3_1 / 2.0;
+        
+        REQUIRE(v3_3.x == (v3_1.x / 2.0));
+        REQUIRE(v3_3.y == (v3_1.y / 2.0));
+        REQUIRE(v3_3.z == (v3_1.z / 2.0));
     }
 
     SECTION("vector dot product") {
-        float d1 = v1.dot(v2);
-        float d2 = v2.dot(v1);
+        float d2_1 = v2_1.dot(v2_2);
+        float d2_2 = v2_2.dot(v2_1);
 
-        REQUIRE(d1 == d2);
-        REQUIRE(d1 == 68.0);
+        REQUIRE(d2_1 == d2_2);
+        REQUIRE(d2_1 == 28.0);
+
+        float d3_1 = v3_1.dot(v3_2);
+        float d3_2 = v3_2.dot(v3_1);
+
+        REQUIRE(d3_1 == d3_2);
+        REQUIRE(d3_1 == 68.0);
     }
 
     SECTION("vector cross product") {
-        Vector3 v3 = v1.cross(v2);
-        Vector3 v4 = v2.cross(v1);
+        Vector3 v3_3 = v3_1.cross(v3_2);
+        Vector3 v3_4 = v3_2.cross(v3_1);
 
-        REQUIRE(v3.x == -12.0);
-        REQUIRE(v3.y == 28.0);
-        REQUIRE(v3.z == -16.0);
+        REQUIRE(v3_3.x == -12.0);
+        REQUIRE(v3_3.y == 28.0);
+        REQUIRE(v3_3.z == -16.0);
 
-        REQUIRE(v4.x == 12.0);
-        REQUIRE(v4.y == -28.0);
-        REQUIRE(v4.z == 16.0);
+        REQUIRE(v3_4.x == 12.0);
+        REQUIRE(v3_4.y == -28.0);
+        REQUIRE(v3_4.z == 16.0);
     }
 
     SECTION("vector normalization") {
-        Vector3 v3 = v1;
-        v3.normalize();
+        Vector2 v2_3 = v2_1;
+        v2_3.normalize();
 
-        REQUIRE(v3.x == (2.0 / 11.0));
-        REQUIRE(v3.y == (6.0 / 11.0));
-        REQUIRE(v3.z == (9.0 / 11.0));
+        REQUIRE(v2_3.x == (v2_1.x / 5.0));
+        REQUIRE(v2_3.y == (v2_1.y / 5.0));
+
+        Vector3 v3_3 = v3_1;
+        v3_3.normalize();
+
+        REQUIRE(v3_3.x == (v3_1.x / 11.0));
+        REQUIRE(v3_3.y == (v3_1.y / 11.0));
+        REQUIRE(v3_3.z == (v3_1.z / 11.0));
     }
 }
