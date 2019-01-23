@@ -26,7 +26,12 @@ void Game::init() {
 
 	renderSystem = new RenderSystem(window);
 
-	glfwSetKeyCallback(window, handleInput);	
+	glfwSetKeyCallback(window, handleInput);
+
+	resourceManager->loadResource(new Mesh, "cube", "res/cube.obj");
+
+	StaticObject* object = entityManager->spawn<StaticObject>();
+	object->model()->init("cube", "");
 }
 
 void Game::initGLFW() {
@@ -36,10 +41,17 @@ void Game::initGLFW() {
 		exit(EXIT_FAILURE);
 	}
 
-	window = glfwCreateWindow(640, 480, "Test Game", NULL, NULL);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+	window = glfwCreateWindow(1280, 720, "Game", NULL, NULL);
 	if(!window) {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
+	} else {
+		std::cout << "GLFW window instantiated" << std::endl;
 	}
 
 	glfwMakeContextCurrent(window);
@@ -48,6 +60,8 @@ void Game::initGLFW() {
 	if(glewInit() != GLEW_OK) {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
+	} else {
+		std::cout << "GLEW initialized" << std::endl;
 	}
 
 	initialized = true;

@@ -12,22 +12,22 @@ ResourceManager* ResourceManager::instance() {
 }
 
 void ResourceManager::loadResource(Resource* res, const string name, const string path) {
-    res->setPath(path);
-    res->setId(resources.size());
+	res->setPath(path);
+	res->setId(resources.size());
 
-    int result = res->load();
+	int result = res->load();
 
-    if(result == 0) {
-        resources.emplace(name, res);
-    } else {
-        delete res;
-    }
+	if(result == 0) {
+		resources.emplace(name, res);
+	} else {
+		delete res;
+	}
 }
 
 void Resource::setId(unsigned int id) {
-    resourceId = id;
+	resourceId = id;
 }
 
 void Resource::setPath(const std::string path) {
-    resourcePath = path;
+	resourcePath = path;
 }

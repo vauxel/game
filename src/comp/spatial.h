@@ -1,14 +1,14 @@
 #ifndef _SPATIAL_H_
 #define _SPATIAL_H_
 
-#include "data/vectors.h"
-#include "data/quaternion.h"
+#include <glm/vec3.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 typedef struct Spatial {
-	Vector3 position;
-	Quaternion rotation;
-	Vector3 velocity;
-	Quaternion angularVel;
+	glm::vec3 position;
+	glm::quat rotation;
+	glm::vec3 velocity;
+	glm::quat angularVel;
 } Spatial;
 
 #endif

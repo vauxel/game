@@ -26,7 +26,7 @@ $(APP_DIR)/$(TARGET): $(OBJECTS)
 
 $(APP_DIR)/$(TEST_TARGET): $(TEST_OBJECTS)
 	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $(APP_DIR)/$(TEST_TARGET) $(filter-out $(OBJ_DIR)/src/main.o, $(OBJECTS)) $(TEST_OBJECTS)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $(APP_DIR)/$(TEST_TARGET) $(filter-out $(OBJ_DIR)/src/main.o, $(OBJECTS)) $(TEST_OBJECTS)
 
 .PHONY: all build clean
 

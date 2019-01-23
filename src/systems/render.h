@@ -3,18 +3,22 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "data/vectors.h"
+#include <glm/mat4x4.hpp>
 #include "system.h"
+#include "resources/shader.h"
 
 class RenderSystem : public System {
 	private:
 		GLFWwindow* window;
 	public:
+		Shader* shader;
+		
 		RenderSystem(GLFWwindow* win);
 		~RenderSystem();
 
 		virtual void attachEntity(Entity* entity);
-        virtual void loop();
+		virtual void loop();
+		void loadModel(Model* model);
 };
 
 #endif

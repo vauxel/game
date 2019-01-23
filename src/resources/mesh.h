@@ -4,18 +4,20 @@
 #include <fstream>
 #include <cstring>
 #include <vector>
-#include "data/vectors.h"
+#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 #include "resource.h"
 
 class Mesh : public Resource {
 	public:
-        vector<Vector3> vertices;
-        vector<Vector2> uvs;
-        vector<Vector3> normals;
-        vector<unsigned int> vertexIndices, uvIndices, normalIndices;
+		vector<glm::vec3> vertices;
+		vector<glm::vec2> uvs;
+		vector<glm::vec3> normals;
+		vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 
-        unsigned int vbo, vao;
-        
+		unsigned int vbo, ebo, vao;
+		bool assigned = false;
+
 		int load();
 		void unload();
 };
