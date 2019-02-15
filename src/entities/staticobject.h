@@ -3,18 +3,18 @@
 
 #include "entity.h"
 #include "comp/spatial.h"
-#include "comp/model.h"
+#include "comp/render.h"
 
 class StaticObject : public Entity {
 	private:
 		unsigned int _flags = EntityFlags::RENDERABLE;
 		
 		Spatial _spatial;
-		Model _model;
+		Render _render;
 	public:
 		unsigned int flags() { return _flags; }
 		Spatial* spatial() override { return &_spatial; }
-		Model* model() override { return &_model; }
+		Render* render() override { return &_render; }
 };
 
 #endif

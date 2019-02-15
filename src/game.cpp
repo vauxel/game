@@ -28,10 +28,11 @@ void Game::init() {
 
 	glfwSetKeyCallback(window, handleInput);
 
-	resourceManager->loadResource(new Mesh, "cube", "res/cube.obj");
+	resourceManager->loadResource(new Texture(), "cube_texture", "res/cube_texture.png");
+	resourceManager->loadResource(new Model(), "cube", "res/cube_textured.obj");
 
 	StaticObject* object = entityManager->spawn<StaticObject>();
-	object->model()->init("cube", "");
+	object->render()->init("cube", "cube_texture");
 }
 
 void Game::initGLFW() {

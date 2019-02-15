@@ -17,10 +17,10 @@ class Resource {
 		virtual void unload() = 0;
 
 		void setId(unsigned int id);
-		const unsigned int getId();
+		unsigned int getId();
 
-		void setPath(const std::string path);
-		const string getPath();
+		void setPath(string path);
+		string getPath();
 };
 
 class ResourceManager {
@@ -31,10 +31,10 @@ class ResourceManager {
 		ResourceManager();
 	public:
 		static ResourceManager* instance();
-		void loadResource(Resource* res, const string name, const string path);
+		void loadResource(Resource* res, string name, string path);
 
 		template<typename T>
-		T* getResource(const string name) {
+		T* getResource(string name) {
 			unordered_map<std::string, Resource*>::iterator it = resources.find(name);
 			return (it == resources.end()) ? nullptr : dynamic_cast<T*>(it->second);
 		}

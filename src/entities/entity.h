@@ -4,7 +4,7 @@
 #include <vector>
 #include "systems/system.h"
 #include "comp/spatial.h"
-#include "comp/model.h"
+#include "comp/render.h"
 
 class System;
 
@@ -20,7 +20,7 @@ class Entity {
 
 		virtual unsigned int flags() { return EntityFlags::NONE; }
 		virtual Spatial* spatial() { return nullptr; }
-		virtual Model* model() { return nullptr; }
+		virtual Render* render() { return nullptr; }
 };
 
 class EntityManager {

@@ -18,7 +18,6 @@ class RenderSystem : public System {
 
 		virtual void attachEntity(Entity* entity);
 		virtual void loop();
-		void loadModel(Model* model);
 };
 
 #endif

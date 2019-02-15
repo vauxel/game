@@ -11,7 +11,7 @@ ResourceManager* ResourceManager::instance() {
 	return _instance;
 }
 
-void ResourceManager::loadResource(Resource* res, const string name, const string path) {
+void ResourceManager::loadResource(Resource* res, string name, string path) {
 	res->setPath(path);
 	res->setId(resources.size());
 
@@ -28,6 +28,14 @@ void Resource::setId(unsigned int id) {
 	resourceId = id;
 }
 
-void Resource::setPath(const std::string path) {
+unsigned int Resource::getId() {
+	return this->resourceId;
+}
+
+void Resource::setPath(string path) {
 	resourcePath = path;
+}
+
+string Resource::getPath() {
+	return this->resourcePath;
 }
