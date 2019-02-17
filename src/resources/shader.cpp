@@ -1,7 +1,14 @@
 #include "shader.h"
 
 int Shader::load() {
-	std::ifstream vertShaderFile(resourcePath + ".vert"), fragShaderFile(resourcePath + ".frag");
+	char vertShaderPath[strlen(resourcePath) + 5];
+	char fragShaderPath[strlen(resourcePath) + 5];
+	strcpy(vertShaderPath, resourcePath);
+	strcpy(fragShaderPath, resourcePath);
+	strcat(vertShaderPath, ".vert");
+	strcat(fragShaderPath, ".frag");
+
+	std::ifstream vertShaderFile(vertShaderPath), fragShaderFile(fragShaderPath);
 
 	std::string vertexString(
 		(std::istreambuf_iterator<char>(vertShaderFile)),
@@ -28,9 +35,9 @@ int Shader::load() {
 	glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
 	if(!success) {
 		glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-		std::cout << "Vertex shader failed to compile\n" << infoLog << std::endl;
+		LOG_ERROR("Vertex shader failed to compile: %s", infoLog);
 	} else {
-		std::cout << "Vertex shader successfully compiled" << std::endl;
+		LOG_DEBUG("Vertex shader successfully compiled");
 	}
 
 	fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -40,9 +47,9 @@ int Shader::load() {
 	glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
 	if(!success) {
 		glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-		std::cout << "Fragment shader failed to compile\n" << infoLog << std::endl;
+		LOG_ERROR("Fragment shader failed to compile: %s", infoLog);
 	} else {
-		std::cout << "Fragment shader successfully compiled" << std::endl;
+		LOG_DEBUG("Fragment shader successfully compiled");
 	}
 
 	program = glCreateProgram();
@@ -54,9 +61,9 @@ int Shader::load() {
 	glGetProgramiv(program, GL_LINK_STATUS, &success);
 	if(!success) {
 		glGetShaderInfoLog(program, 512, NULL, infoLog);
-		std::cout << "Shader program failed to link\n" << infoLog << std::endl;
+		LOG_ERROR("Shader program failed to link: %s", infoLog);
 	} else {
-		std::cout << "Shader program successfully linked" << std::endl;
+		LOG_DEBUG("Shader program successfully linked");
 	}
 
 	glDetachShader(program, vertex);
@@ -65,11 +72,12 @@ int Shader::load() {
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
 
+	LOG_DEBUG("Shader loaded: %s, %s", vertShaderPath, fragShaderPath);
 	return 0;
 }
 
 void Shader::unload() {
-	
+	LOG_DEBUG("Shader unloaded: %s", resourcePath);
 }
 
 GLuint Shader::getUniformLocation(const char* uniform) {

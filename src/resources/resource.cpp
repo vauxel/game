@@ -12,7 +12,7 @@ ResourceManager* ResourceManager::instance() {
 }
 
 void ResourceManager::loadResource(Resource* res, string name, string path) {
-	res->setPath(path);
+	res->setPath(path.c_str());
 	res->setId(resources.size());
 
 	int result = res->load();
@@ -32,10 +32,10 @@ unsigned int Resource::getId() {
 	return this->resourceId;
 }
 
-void Resource::setPath(string path) {
+void Resource::setPath(const char* path) {
 	resourcePath = path;
 }
 
-string Resource::getPath() {
+const char* Resource::getPath() {
 	return this->resourcePath;
 }

@@ -2,6 +2,7 @@
 #define _RENDER_H_
 
 #include <string>
+#include "util/logger.h"
 #include "resources/model.h"
 #include "resources/texture.h"
 

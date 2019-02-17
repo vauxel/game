@@ -4,9 +4,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+#include "util/logger.h"
 #include "resources/resource.h"
 #include "systems/render.h"
 #include "entities/entity.h"
+
+#define LOG_LEVEL LOG_LVL_DEBUG
 
 class Game {
 	private:

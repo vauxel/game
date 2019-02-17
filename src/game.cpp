@@ -33,6 +33,8 @@ void Game::init() {
 
 	StaticObject* object = entityManager->spawn<StaticObject>();
 	object->render()->init("cube", "cube_texture");
+
+	LOG_INFO("Game initialized");
 }
 
 void Game::initGLFW() {
@@ -49,20 +51,22 @@ void Game::initGLFW() {
 
 	window = glfwCreateWindow(1280, 720, "Game", NULL, NULL);
 	if(!window) {
+		LOG_ERROR("GLFW window failed to be instantiated");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	} else {
-		std::cout << "GLFW window instantiated" << std::endl;
+		LOG_DEBUG("GLFW window instantiated");
 	}
 
 	glfwMakeContextCurrent(window);
 
 	glewExperimental = GL_TRUE;
 	if(glewInit() != GLEW_OK) {
+		LOG_ERROR("GLEW failed to be initialized");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	} else {
-		std::cout << "GLEW initialized" << std::endl;
+		LOG_DEBUG("GLEW initialized");
 	}
 
 	initialized = true;
@@ -85,5 +89,5 @@ void Game::handleInput(GLFWwindow* window, int key, int scancode, int action, in
 }
 
 void Game::handleGLFWError(int error, const char* description) {
-	fprintf(stderr, "GLFW Error: %s\n", description);
+	LOG_ERROR("GLFW Error: %s", description);
 }

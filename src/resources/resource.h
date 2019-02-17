@@ -9,7 +9,7 @@ using namespace std;
 class Resource {
 	protected:
 		unsigned int resourceId;
-		string resourcePath;
+		const char* resourcePath;
 	public:
 		virtual ~Resource() {};
 
@@ -19,8 +19,8 @@ class Resource {
 		void setId(unsigned int id);
 		unsigned int getId();
 
-		void setPath(string path);
-		string getPath();
+		void setPath(const char* path);
+		const char* getPath();
 };
 
 class ResourceManager {

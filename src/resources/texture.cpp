@@ -5,7 +5,7 @@ int Texture::load() {
 	glBindTexture(GL_TEXTURE_2D, this->id);
 
 	unsigned char* image = SOIL_load_image(
-		resourcePath.c_str(),
+		resourcePath,
 		&this->width,
 		&this->height,
 		0,
@@ -29,11 +29,14 @@ int Texture::load() {
 
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	LOG_DEBUG("Texture loaded: %s", resourcePath);
 	return 0;
 }
 
 void Texture::unload() {
 	glDeleteTextures(1, &this->id);
+	LOG_DEBUG("Texture unloaded: %s", resourcePath);
 }
 
 void Texture::bind(GLenum textureUnit) {

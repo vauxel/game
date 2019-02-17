@@ -5,11 +5,11 @@ void Render::init(std::string modelName, std::string texName) {
 	texture = ResourceManager::instance()->getResource<Texture>(texName);
 
 	if(model == nullptr) {
-		std::cout << "Failed to load model for render component" << std::endl;
+		LOG_ERROR("Failed to load render model: %s", modelName.c_str());
 	}
 
 	if(texture == nullptr) {
-		std::cout << "Failed to load texture for render component" << std::endl;
+		LOG_ERROR("Failed to load render texture: %s", texName.c_str());
 	}
 }
 

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <SOIL.h>
+#include "util/logger.h"
 #include "resource.h"
 
 class Texture : public Resource {

@@ -3,18 +3,27 @@
 int Model::load() {
 	Assimp::Importer importer;
 
-	const aiScene* pScene = importer.ReadFile(resourcePath.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+	const aiScene* pScene = importer.ReadFile(resourcePath, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+
+	int ret = -1;
 
 	if(pScene) {
-		return init(pScene);
+		ret = init(pScene);
+
+		if(ret != 0) {
+			LOG_ERROR("Failed to initialize model: %s", resourcePath);
+		}
 	} else {
-		std::cout << "Error parsing model: " << importer.GetErrorString() << std::endl;
+		LOG_ERROR("Failed to parse model: %s", importer.GetErrorString());
 	}
 
-	return -1;
+	LOG_DEBUG("Model loaded: %s", resourcePath);
+	return ret;
 }
 
-void Model::unload() { }
+void Model::unload() {
+	LOG_DEBUG("Model unloaded: %s", resourcePath);
+}
 
 int Model::init(const aiScene* pScene) {
 	meshes.resize(pScene->mNumMeshes);
