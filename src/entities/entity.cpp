@@ -20,3 +20,9 @@ void EntityManager::attachToSystems(Entity* entity) {
 		systems[i]->attachEntity(entity);
 	}
 }
+
+void EntityManager::detachFromSystems(Entity* entity) {
+	for(unsigned int i = 0; i < systems.size(); i++) {
+		systems[i]->detachEntity(entity);
+	}
+}

@@ -8,6 +8,7 @@
 #include "resources/resource.h"
 #include "systems/render.h"
 #include "entities/entity.h"
+#include "input.h"
 
 #define LOG_LEVEL LOG_LVL_DEBUG
 
@@ -18,13 +19,16 @@ class Game {
 		ResourceManager* resourceManager;
 		EntityManager* entityManager;
 		RenderSystem* renderSystem;
+		Input* input;
 		GLFWwindow* window;
+
+		const unsigned int width = 1280;
+		const unsigned int height = 720;
 
 		Game();
 		~Game();
 
 		void initGLFW();
-		static void handleInput(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void handleGLFWError(int error, const char* description);
 	public:
 		bool initialized = false;

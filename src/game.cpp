@@ -25,8 +25,9 @@ void Game::init() {
 	entityManager = EntityManager::instance();
 
 	renderSystem = new RenderSystem(window);
+	input = new Input();
 
-	glfwSetKeyCallback(window, handleInput);
+	glfwSetKeyCallback(window, input->handleInput);
 
 	resourceManager->loadResource(new Texture(), "cube_texture", "res/cube_texture.png");
 	resourceManager->loadResource(new Model(), "cube", "res/cube_textured.obj");
@@ -49,7 +50,7 @@ void Game::initGLFW() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	window = glfwCreateWindow(1280, 720, "Game", NULL, NULL);
+	window = glfwCreateWindow(width, height, "Game", NULL, NULL);
 	if(!window) {
 		LOG_ERROR("GLFW window failed to be instantiated");
 		glfwTerminate();
@@ -79,12 +80,6 @@ void Game::loop() {
 		
 		glfwPollEvents();
 		running = !glfwWindowShouldClose(window);
-	}
-}
-
-void Game::handleInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, GLFW_TRUE);
 	}
 }
 

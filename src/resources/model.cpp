@@ -37,8 +37,8 @@ int Model::init(const aiScene* pScene) {
 }
 
 void Model::initMesh(unsigned int index, const aiMesh* paiMesh) {
-	vector<Vertex> vertices;
-	vector<unsigned int> indices;
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
 
 	aiVector3D zero3d(0.0f, 0.0f, 0.0f);
 
@@ -67,7 +67,7 @@ void Model::initMesh(unsigned int index, const aiMesh* paiMesh) {
 	meshes[index].init(vertices, indices);
 }
 
-void Model::Mesh::init(const vector<Vertex>& vertices, const vector<unsigned int>& indices) {
+void Model::Mesh::init(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
 	indicesCount = indices.size();
 
 	glGenVertexArrays(1, &vao);

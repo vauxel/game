@@ -34,13 +34,13 @@ class Model : public Resource {
 			Mesh();
 			~Mesh();
 
-			void init(const vector<Vertex>& vertices, const vector<unsigned int>& indices);
+			void init(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 
 			unsigned int vao, vbo, ebo;
 			unsigned int indicesCount;
 		};
 
-		vector<Mesh> meshes;
+		std::vector<Mesh> meshes;
 	private:
 		int init(const aiScene* pScene);
 		void initMesh(unsigned int index, const aiMesh* paiMesh);

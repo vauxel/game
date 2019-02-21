@@ -31,10 +31,10 @@ class ResourceManager {
 		ResourceManager();
 	public:
 		static ResourceManager* instance();
-		void loadResource(Resource* res, string name, string path);
+		void loadResource(Resource* res, std::string name, std::string path);
 
 		template<typename T>
-		T* getResource(string name) {
+		T* getResource(std::string name) {
 			unordered_map<std::string, Resource*>::iterator it = resources.find(name);
 			return (it == resources.end()) ? nullptr : dynamic_cast<T*>(it->second);
 		}

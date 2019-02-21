@@ -12,6 +12,8 @@ RenderSystem::RenderSystem(GLFWwindow* win) {
 
 	ResourceManager::instance()->loadResource(new Shader, "shader", "res/shader");
 	shader = ResourceManager::instance()->getResource<Shader>("shader");
+
+	MessageDispatcher::instance()->instance()->registerHandler(MessageType::INPUT, this);
 }
 
 RenderSystem::~RenderSystem() { }
@@ -24,7 +26,7 @@ void RenderSystem::loop() {
 
 		glUseProgram(shader->program);
 
-		glm::mat4 projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 1280.0f / 720.0f, 0.1f, 100.0f);
+		glm::mat4 projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 100.0f);
 		glm::mat4 viewMatrix = glm::lookAt(
 			glm::vec3(5.0f, 5.0f, 5.0f),
 			glm::vec3(0.0f, 0.0f, 0.0f),
@@ -45,5 +47,17 @@ void RenderSystem::loop() {
 void RenderSystem::attachEntity(Entity* entity) {
 	if(entity->flags() & EntityFlags::RENDERABLE) {
 		entities.push_back(entity);
+	}
+}
+
+void RenderSystem::handleMessage(MessageType type, Message* msg) {
+	if(type == MessageType::INPUT) {
+		InputMsg* data = static_cast<InputMsg*>(msg);
+		
+		switch(data->keycode) {
+			case GLFW_KEY_ESCAPE:
+				glfwSetWindowShouldClose(window, GLFW_TRUE);
+				break;
+		}
 	}
 }

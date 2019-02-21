@@ -6,6 +6,7 @@
 #include <glm/mat4x4.hpp>
 #include "system.h"
 #include "resources/shader.h"
+#include "messages/input.h"
 
 class RenderSystem : public System {
 	private:
@@ -18,6 +19,7 @@ class RenderSystem : public System {
 
 		virtual void attachEntity(Entity* entity);
 		virtual void loop();
+		virtual void handleMessage(MessageType type, Message* msg);
 };
 
 #endif

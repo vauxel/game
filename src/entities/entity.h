@@ -32,6 +32,7 @@ class EntityManager {
 
 		EntityManager();
 		void attachToSystems(Entity* entity);
+		void detachFromSystems(Entity* entity);
 	public:
 		static EntityManager* instance();
 

@@ -11,7 +11,7 @@ ResourceManager* ResourceManager::instance() {
 	return _instance;
 }
 
-void ResourceManager::loadResource(Resource* res, string name, string path) {
+void ResourceManager::loadResource(Resource* res, std::string name, std::string path) {
 	res->setPath(path.c_str());
 	res->setId(resources.size());
 
