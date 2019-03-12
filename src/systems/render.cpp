@@ -13,10 +13,25 @@ RenderSystem::RenderSystem(GLFWwindow* win) {
 	ResourceManager::instance()->loadResource(new Shader, "shader", "res/shader");
 	shader = ResourceManager::instance()->getResource<Shader>("shader");
 
-	MessageDispatcher::instance()->instance()->registerHandler(MessageType::INPUT, this);
+	camera = new Camera(
+		glm::vec3(0.0f, 0.0f, 10.0f),
+		glm::vec3(0.0f, 0.0f, -1.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f)
+	);
+
+	InputHandler::instance()->addKeyBinding(GLFW_KEY_W, std::bind(&Camera::moveForward, camera));
+	InputHandler::instance()->addKeyBinding(GLFW_KEY_S, std::bind(&Camera::moveBackward, camera));
+	InputHandler::instance()->addKeyBinding(GLFW_KEY_A, std::bind(&Camera::moveLeft, camera));
+	InputHandler::instance()->addKeyBinding(GLFW_KEY_D, std::bind(&Camera::moveRight, camera));
+	InputHandler::instance()->addMouseBinding(std::bind(
+		&Camera::moveFromMouse,
+		camera,
+		std::placeholders::_1,
+		std::placeholders::_2
+	));
 }
 
-RenderSystem::~RenderSystem() { }
+RenderSystem::~RenderSystem() {}
 
 void RenderSystem::loop() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -28,9 +43,9 @@ void RenderSystem::loop() {
 
 		glm::mat4 projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 100.0f);
 		glm::mat4 viewMatrix = glm::lookAt(
-			glm::vec3(5.0f, 5.0f, 5.0f),
-			glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 1.0f, 0.0f)
+			camera->getPos(),
+			camera->getPos() + camera->getTarget(),
+			camera->getUp()
 		);
 		glm::mat4 modelMatrix = glm::mat4(1.0f);
 
@@ -51,13 +66,5 @@ void RenderSystem::attachEntity(Entity* entity) {
 }
 
 void RenderSystem::handleMessage(MessageType type, Message* msg) {
-	if(type == MessageType::INPUT) {
-		InputMsg* data = static_cast<InputMsg*>(msg);
-		
-		switch(data->keycode) {
-			case GLFW_KEY_ESCAPE:
-				glfwSetWindowShouldClose(window, GLFW_TRUE);
-				break;
-		}
-	}
+	
 }

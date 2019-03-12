@@ -6,13 +6,15 @@
 #include <glm/mat4x4.hpp>
 #include "system.h"
 #include "resources/shader.h"
-#include "messages/input.h"
+#include "input.h"
+#include "camera.h"
 
 class RenderSystem : public System {
 	private:
 		GLFWwindow* window;
 	public:
 		Shader* shader;
+		Camera* camera;
 		
 		RenderSystem(GLFWwindow* win);
 		~RenderSystem();

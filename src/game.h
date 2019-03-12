@@ -18,8 +18,8 @@ class Game {
 		bool running = false;
 		ResourceManager* resourceManager;
 		EntityManager* entityManager;
+		InputHandler* inputHandler;
 		RenderSystem* renderSystem;
-		Input* input;
 		GLFWwindow* window;
 
 		const unsigned int width = 1280;
@@ -29,7 +29,10 @@ class Game {
 		~Game();
 
 		void initGLFW();
+		void quit();
 		static void handleGLFWError(int error, const char* description);
+		static void handleInput(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void handleCursor(GLFWwindow* window, double xpos, double ypos);
 	public:
 		bool initialized = false;
 

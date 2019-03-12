@@ -24,16 +24,24 @@ void Game::init() {
 	resourceManager = ResourceManager::instance();
 	entityManager = EntityManager::instance();
 
-	renderSystem = new RenderSystem(window);
-	input = new Input();
+	inputHandler = InputHandler::instance();
 
-	glfwSetKeyCallback(window, input->handleInput);
+	renderSystem = new RenderSystem(window);
+
+	glfwSetWindowUserPointer(window, this);
+
+	glfwSetKeyCallback(window, handleInput);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(window, handleCursor);
 
 	resourceManager->loadResource(new Texture(), "cube_texture", "res/cube_texture.png");
 	resourceManager->loadResource(new Model(), "cube", "res/cube_textured.obj");
 
 	StaticObject* object = entityManager->spawn<StaticObject>();
 	object->render()->init("cube", "cube_texture");
+
+	inputHandler->addKeyBinding(GLFW_KEY_Q, std::bind(&Game::quit, this));
+	inputHandler->addKeyBinding(GLFW_KEY_ESCAPE, std::bind(&Game::quit, this));
 
 	LOG_INFO("Game initialized");
 }
@@ -83,6 +91,17 @@ void Game::loop() {
 	}
 }
 
+void Game::quit() {
+	glfwSetWindowShouldClose(window, 1);
+}
+
 void Game::handleGLFWError(int error, const char* description) {
 	LOG_ERROR("GLFW Error: %s", description);
+}
+
+void Game::handleInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	InputHandler::instance()->handleInput(window, key, scancode, action, mods);
+}
+void Game::handleCursor(GLFWwindow* window, double xpos, double ypos) {
+	InputHandler::instance()->handleCursor(window, xpos, ypos);
 }
