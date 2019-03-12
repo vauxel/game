@@ -26,3 +26,15 @@ void EntityManager::detachFromSystems(Entity* entity) {
 		systems[i]->detachEntity(entity);
 	}
 }
+
+void EntityManager::instantiate(Entity* entity) {
+	entity->setId(++lastEntityId);
+	attachToSystems(entity);
+	LOG_DEBUG("Entity [id=%d] instantiated", lastEntityId);
+}
+
+void Entity::setId(int id) {
+	if(!entityId) {
+		entityId = id;
+	}
+}

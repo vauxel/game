@@ -58,8 +58,4 @@ void Camera::moveFromMouse(double xpos, double ypos) {
 	target.y = sin(glm::radians(pitch));
 	target.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	target = glm::normalize(target);
-
-	LOG_DEBUG("Pos: %f %f %f", pos.x, pos.y, pos.z);
-	LOG_DEBUG("Target: %f %f %f", target.x, target.y, target.z);
-	LOG_DEBUG("Up: %f %f %f", up.x, up.y, up.z);
 }

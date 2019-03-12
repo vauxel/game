@@ -1,5 +1,4 @@
 #include "game.h"
-#include "entities/staticobject.h"
 
 Game* Game::_instance = 0;
 Game::Game() {}
@@ -37,8 +36,10 @@ void Game::init() {
 	resourceManager->loadResource(new Texture(), "cube_texture", "res/cube_texture.png");
 	resourceManager->loadResource(new Model(), "cube", "res/cube_textured.obj");
 
-	StaticObject* object = entityManager->spawn<StaticObject>();
-	object->render()->init("cube", "cube_texture");
+	Entity* cube = new Entity();
+	cube->assign<Spatial>();
+	cube->assign<Render>("cube", "cube_texture");
+	entityManager->instantiate(cube);
 
 	inputHandler->addKeyBinding(GLFW_KEY_Q, std::bind(&Game::quit, this));
 	inputHandler->addKeyBinding(GLFW_KEY_ESCAPE, std::bind(&Game::quit, this));

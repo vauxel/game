@@ -1,6 +1,6 @@
 #include "render.h"
 
-void Render::init(std::string modelName, std::string texName) {
+Render::Render(std::string modelName, std::string texName) {
 	model = ResourceManager::instance()->getResource<Model>(modelName);
 	texture = ResourceManager::instance()->getResource<Texture>(texName);
 

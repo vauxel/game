@@ -53,14 +53,14 @@ void RenderSystem::loop() {
 		glUniformMatrix4fv(shader->getUniformLocation("viewMatrix"), 1, GL_FALSE, &viewMatrix[0][0]);
 		glUniformMatrix4fv(shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &modelMatrix[0][0]);
 
-		entity->render()->render();
+		entity->get<Render>()->render();
 	}
 
 	glfwSwapBuffers(window);
 }
 
 void RenderSystem::attachEntity(Entity* entity) {
-	if(entity->flags() & EntityFlags::RENDERABLE) {
+	if(entity->has<Render>()) {
 		entities.push_back(entity);
 	}
 }

@@ -3,12 +3,13 @@
 
 #include <glm/vec3.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include "entity.h"
 
-typedef struct Spatial {
+struct Spatial : public Component {
 	glm::vec3 position;
 	glm::quat rotation;
 	glm::vec3 velocity;
 	glm::quat angularVel;
-} Spatial;
+};
 
 #endif

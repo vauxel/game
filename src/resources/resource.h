@@ -26,7 +26,7 @@ class Resource {
 class ResourceManager {
 	private:
 		static ResourceManager* _instance;
-		unordered_map<std::string, Resource*> resources;
+		std::unordered_map<std::string, Resource*> resources;
 
 		ResourceManager();
 	public:
@@ -35,7 +35,7 @@ class ResourceManager {
 
 		template<typename T>
 		T* getResource(std::string name) {
-			unordered_map<std::string, Resource*>::iterator it = resources.find(name);
+			std::unordered_map<std::string, Resource*>::iterator it = resources.find(name);
 			return (it == resources.end()) ? nullptr : dynamic_cast<T*>(it->second);
 		}
 };

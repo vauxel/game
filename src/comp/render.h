@@ -3,16 +3,16 @@
 
 #include <string>
 #include "util/logger.h"
+#include "entity.h"
 #include "resources/model.h"
 #include "resources/texture.h"
 
-class Render {
-	public:
-		Model* model;
-		Texture* texture;
+struct Render : public Component {
+	Model* model;
+	Texture* texture;
 
-		void init(std::string modelName, std::string texName);
-		void render();
+	Render(std::string modelName, std::string texName);
+	void render();
 };
 
 #endif

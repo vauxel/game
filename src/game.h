@@ -7,8 +7,10 @@
 #include "util/logger.h"
 #include "resources/resource.h"
 #include "systems/render.h"
-#include "entities/entity.h"
 #include "input.h"
+#include "entity.h"
+#include "comp/render.h"
+#include "comp/spatial.h"
 
 #define LOG_LEVEL LOG_LVL_DEBUG
 

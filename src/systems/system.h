@@ -2,7 +2,7 @@
 #define _SYSTEM_H_
 
 #include <vector>
-#include "entities/entity.h"
+#include "entity.h"
 #include "message.h"
 
 class Entity;

@@ -8,6 +8,8 @@
 #include "resources/shader.h"
 #include "input.h"
 #include "camera.h"
+#include "entity.h"
+#include "comp/render.h"
 
 class RenderSystem : public System {
 	private:
