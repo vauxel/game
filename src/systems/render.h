@@ -16,9 +16,11 @@
 class RenderSystem : public System {
 	private:
 		GLFWwindow* window;
+		Camera* camera;
 		glm::mat4 cameraMatrix;
 		glm::mat4 modelMatrix;
 
+		void setCamera(Camera* cam);
 		void updateCameraMatrix(Camera* cam);
 		void updateModelMatrix(glm::vec3 pos, glm::quat rot);
 		std::string getLightUniform(int index, const char* name);
@@ -26,11 +28,9 @@ class RenderSystem : public System {
 		void renderEntities();
 	public:
 		Shader* shader;
-		Camera* camera;
-
 		std::vector<Entity*> lights;
 		
-		RenderSystem(GLFWwindow* win);
+		RenderSystem(GLFWwindow* win, Camera* cam);
 		~RenderSystem();
 
 		virtual void attachEntity(Entity* entity);

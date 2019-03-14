@@ -25,7 +25,14 @@ void Game::init() {
 
 	inputHandler = InputHandler::instance();
 
-	renderSystem = new RenderSystem(window);
+	camera = new Camera(
+		glm::vec3(0.0f, 0.0f, 10.0f),
+		glm::vec3(0.0f, 0.0f, -1.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f)
+	);
+
+	renderSystem = new RenderSystem(window, camera);
+	controlSystem = new ControlSystem(camera);
 
 	glfwSetWindowUserPointer(window, this);
 
@@ -114,9 +121,10 @@ void Game::initGLFW() {
 
 void Game::loop() {
 	while(running) {
+		inputHandler->update();
+		controlSystem->loop();
 		renderSystem->loop();
 		
-		glfwPollEvents();
 		running = !glfwWindowShouldClose(window);
 	}
 }

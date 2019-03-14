@@ -7,6 +7,7 @@
 #include "util/logger.h"
 #include "resources/resource.h"
 #include "systems/render.h"
+#include "systems/control.h"
 #include "input.h"
 #include "entity.h"
 #include "comp/render.h"
@@ -22,6 +23,8 @@ class Game {
 		EntityManager* entityManager;
 		InputHandler* inputHandler;
 		RenderSystem* renderSystem;
+		ControlSystem* controlSystem;
+		Camera* camera;
 		GLFWwindow* window;
 
 		const unsigned int width = 1280;

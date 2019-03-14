@@ -1,10 +1,12 @@
 #include "render.h"
 
-RenderSystem::RenderSystem(GLFWwindow* win) {
+RenderSystem::RenderSystem(GLFWwindow* win, Camera* cam) {
 	window = win;
+	camera = cam;
+
 	EntityManager::instance()->registerSystem(this);
 
-	glfwSwapInterval(0);
+	glfwSwapInterval(1);
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -13,27 +15,15 @@ RenderSystem::RenderSystem(GLFWwindow* win) {
 	ResourceManager::instance()->loadResource(new Shader, "shader", "res/shader");
 	shader = ResourceManager::instance()->getResource<Shader>("shader");
 
-	camera = new Camera(
-		glm::vec3(0.0f, 0.0f, 10.0f),
-		glm::vec3(0.0f, 0.0f, -1.0f),
-		glm::vec3(0.0f, 1.0f, 0.0f)
-	);
-
-	InputHandler::instance()->addKeyBinding(GLFW_KEY_W, std::bind(&Camera::moveForward, camera));
-	InputHandler::instance()->addKeyBinding(GLFW_KEY_S, std::bind(&Camera::moveBackward, camera));
-	InputHandler::instance()->addKeyBinding(GLFW_KEY_A, std::bind(&Camera::moveLeft, camera));
-	InputHandler::instance()->addKeyBinding(GLFW_KEY_D, std::bind(&Camera::moveRight, camera));
-	InputHandler::instance()->addMouseBinding(std::bind(
-		&Camera::moveFromMouse,
-		camera,
-		std::placeholders::_1,
-		std::placeholders::_2
-	));
 	InputHandler::instance()->addKeyBinding(GLFW_KEY_1, std::bind(&RenderSystem::moveLight1ToCamera, this));
 	InputHandler::instance()->addKeyBinding(GLFW_KEY_2, std::bind(&RenderSystem::moveLight2ToCamera, this));
 }
 
 RenderSystem::~RenderSystem() {}
+
+void RenderSystem::setCamera(Camera* cam) {
+	camera = cam;
+}
 
 void RenderSystem::updateCameraMatrix(Camera* cam) {
 	glm::mat4 projectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 100.0f);

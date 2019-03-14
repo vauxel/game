@@ -35,7 +35,7 @@ class Camera {
 		double mouseLastY = 0.0;
 		
 		float mouseSens = 0.05f;
-		float step = 0.5f;
+		float step = 0.1f;
 };
 
 #endif

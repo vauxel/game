@@ -13,22 +13,18 @@ glm::vec3& Camera::getUp() {
 }
 
 void Camera::moveForward() {
-	LOG_DEBUG("Camera: FORWARD");
 	pos += target * step;
 }
 
 void Camera::moveBackward() {
-	LOG_DEBUG("Camera: BACKWARD");
 	pos -= target * step;
 }
 
 void Camera::moveLeft() {
-	LOG_DEBUG("Camera: LEFT");
 	pos -= glm::normalize(glm::cross(target, up)) * step;
 }
 
 void Camera::moveRight() {
-	LOG_DEBUG("Camera: RIGHT");
 	pos += glm::normalize(glm::cross(target, up)) * step;
 }
 
