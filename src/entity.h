@@ -11,12 +11,14 @@ struct Component {
 
 #include "comp/spatial.h"
 #include "comp/render.h"
+#include "comp/light.h"
 
 class System;
 
 class Entity {
 	public:
-		void setId(int id);
+		unsigned int getId();
+		void setId(unsigned int id);
 
 		template<typename T, typename... Args>
 		T* assign(Args... args) {
@@ -35,7 +37,7 @@ class Entity {
 			return get<T>() != nullptr;
 		}
 	private:
-		int entityId;
+		unsigned int entityId;
 		std::unordered_map<const std::type_info*, Component*> components;
 };
 

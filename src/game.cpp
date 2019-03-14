@@ -35,11 +35,40 @@ void Game::init() {
 
 	resourceManager->loadResource(new Texture(), "cube_texture", "res/cube_texture.png");
 	resourceManager->loadResource(new Model(), "cube", "res/cube_textured.obj");
+	resourceManager->loadResource(new Model(), "monkey", "res/monkey.obj");
 
 	Entity* cube = new Entity();
-	cube->assign<Spatial>();
+	cube->assign<Spatial>(glm::vec3(0.0f, 0.0f, 0.0f));
 	cube->assign<Render>("cube", "cube_texture");
+
+	Entity* monkey = new Entity();
+	monkey->assign<Spatial>(glm::vec3(0.0f, 0.0f, 5.0f));
+	monkey->assign<Render>("monkey", "cube_texture");
+
+	Entity* light1 = new Entity();
+	light1->assign<Spatial>(glm::vec3(0.0f, 1.5f, 5.0f));
+	light1->assign<Light>(
+		Light::Type::POINT,
+		glm::vec3(2.0f, 2.0f, 2.0f),
+		4.0f,
+		0.1f
+	);
+
+	Entity* light2 = new Entity();
+	light2->assign<Spatial>(glm::vec3(3.0f, 0.0f, 0.0f));
+	light2->assign<Light>(
+		Light::Type::SPOT,
+		glm::vec3(1.0f, 1.0f, 1.0f),
+		1.0f,
+		0.0f,
+		15.0f,
+		glm::vec3(-1.0f, 0.0f, 0.0f)
+	);
+
 	entityManager->instantiate(cube);
+	entityManager->instantiate(monkey);
+	entityManager->instantiate(light1);
+	entityManager->instantiate(light2);
 
 	inputHandler->addKeyBinding(GLFW_KEY_Q, std::bind(&Game::quit, this));
 	inputHandler->addKeyBinding(GLFW_KEY_ESCAPE, std::bind(&Game::quit, this));

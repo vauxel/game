@@ -1,16 +1,20 @@
 #version 460
 
-uniform mat4 modelMatrix;
-uniform mat4 viewMatrix;
-uniform mat4 projectionMatrix;
+uniform mat4 camera;
+uniform mat4 model;
 
 layout(location = 0) in vec3 vertexPosition;
 layout(location = 1) in vec2 vertexUV;
 layout(location = 2) in vec3 vertexNormal;
 
-out vec2 uv;
+out vec3 fragPosition;
+out vec2 fragUV;
+out vec3 fragNormal;
 
 void main() {
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertexPosition, 1.0);
-    uv = vertexUV;
+	fragPosition = vertexPosition;
+	fragUV = vertexUV;
+	fragNormal = vertexNormal;
+
+	gl_Position = camera * model * vec4(vertexPosition, 1.0);
 }

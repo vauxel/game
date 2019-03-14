@@ -33,7 +33,11 @@ void EntityManager::instantiate(Entity* entity) {
 	LOG_DEBUG("Entity [id=%d] instantiated", lastEntityId);
 }
 
-void Entity::setId(int id) {
+unsigned int Entity::getId() {
+	return entityId;
+}
+
+void Entity::setId(unsigned int id) {
 	if(!entityId) {
 		entityId = id;
 	}
