@@ -47,8 +47,10 @@ void InputHandler::handleInput(GLFWwindow* window, int key, int scancode, int ac
 		pressed[key] = false;
 	}
 
-	for(KeyCallback& callback : keyBindings[key]) {
-		callback(key, action, mods);
+	if(action == GLFW_PRESS || action == GLFW_REPEAT) {
+		for(KeyCallback& callback : keyBindings[key]) {
+			callback(key, action, mods);
+		}
 	}
 }
 

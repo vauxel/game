@@ -44,56 +44,58 @@ void RenderSystem::updateModelMatrix(glm::vec3 pos, glm::quat rot) {
 	modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, pos);
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f));
-	modelMatrix = glm::rotate(modelMatrix, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-	//modelMatrix *= glm::mat4_cast(rot);
+	//modelMatrix = glm::rotate(modelMatrix, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+	modelMatrix *= glm::mat4_cast(rot);
 
 	glUniformMatrix4fv(shader->getUniformLocation("model"), 1, GL_FALSE, &modelMatrix[0][0]);
-}
-
-std::string RenderSystem::getLightUniform(int index, const char* name) {
-	std::ostringstream stream;
-	stream << "lights[" << index << "]." << name;
-	return stream.str();
 }
 
 void RenderSystem::updateLightingUniforms() {
 	glUniform1i(shader->getUniformLocation("numLights"), (int)lights.size());
 
+	char uniformName[100];
 	for(unsigned int i = 0; i < lights.size(); i++) {
+		sprintf(uniformName, "lights[%d].type", i);
 		glUniform1i(
-			shader->getUniformLocation(getLightUniform(i, "type").c_str()),
+			shader->getUniformLocation(uniformName),
 			lights[i]->get<Light>()->type
 		);
 
+		sprintf(uniformName, "lights[%d].position", i);
 		glUniform3fv(
-			shader->getUniformLocation(getLightUniform(i, "position").c_str()),
+			shader->getUniformLocation(uniformName),
 			1,
 			&lights[i]->get<Spatial>()->position[0]
 		);
 
+		sprintf(uniformName, "lights[%d].intensities", i);
 		glUniform3fv(
-			shader->getUniformLocation(getLightUniform(i, "intensities").c_str()),
+			shader->getUniformLocation(uniformName),
 			1,
 			&lights[i]->get<Light>()->intensities[0]
 		);
 		
+		sprintf(uniformName, "lights[%d].attenuation", i);
 		glUniform1f(
-			shader->getUniformLocation(getLightUniform(i, "attenuation").c_str()),
+			shader->getUniformLocation(uniformName),
 			lights[i]->get<Light>()->attenuation
 		);
 
+		sprintf(uniformName, "lights[%d].ambientCoefficient", i);
 		glUniform1f(
-			shader->getUniformLocation(getLightUniform(i, "ambientCoefficient").c_str()),
+			shader->getUniformLocation(uniformName),
 			lights[i]->get<Light>()->ambientCoefficient
 		);
 
+		sprintf(uniformName, "lights[%d].coneAngle", i);
 		glUniform1f(
-			shader->getUniformLocation(getLightUniform(i, "coneAngle").c_str()),
+			shader->getUniformLocation(uniformName),
 			lights[i]->get<Light>()->coneAngle
 		);
 
+		sprintf(uniformName, "lights[%d].coneDirection", i);
 		glUniform3fv(
-			shader->getUniformLocation(getLightUniform(i, "coneDirection").c_str()),
+			shader->getUniformLocation(uniformName),
 			1,
 			&lights[i]->get<Light>()->coneDirection[0]
 		);

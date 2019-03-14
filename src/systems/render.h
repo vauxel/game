@@ -1,7 +1,7 @@
 #ifndef _RENDERSYSTEM_H_
 #define _RENDERSYSTEM_H_
 
-#include <sstream>
+#include <cstdio>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/mat4x4.hpp>
@@ -23,7 +23,6 @@ class RenderSystem : public System {
 		void setCamera(Camera* cam);
 		void updateCameraMatrix(Camera* cam);
 		void updateModelMatrix(glm::vec3 pos, glm::quat rot);
-		std::string getLightUniform(int index, const char* name);
 		void updateLightingUniforms();
 		void renderEntities();
 	public:

@@ -40,25 +40,26 @@ void Game::init() {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, handleCursor);
 
+	resourceManager->loadResource(new Texture(), "checker", "res/checker.png");
+	resourceManager->loadResource(new Model(), "plane", "res/plane.obj");
 	resourceManager->loadResource(new Texture(), "cube_texture", "res/cube_texture.png");
 	resourceManager->loadResource(new Model(), "cube", "res/cube_textured.obj");
-	resourceManager->loadResource(new Model(), "monkey", "res/monkey.obj");
+
+	Entity* plane = new Entity();
+	plane->assign<Spatial>(glm::vec3(0.0f, 0.0f, 0.0f));
+	plane->assign<Render>("plane", "checker");
 
 	Entity* cube = new Entity();
-	cube->assign<Spatial>(glm::vec3(0.0f, 0.0f, 0.0f));
+	cube->assign<Spatial>(glm::vec3(0.0f, 1.0f, 0.0f));
 	cube->assign<Render>("cube", "cube_texture");
 
-	Entity* monkey = new Entity();
-	monkey->assign<Spatial>(glm::vec3(0.0f, 0.0f, 5.0f));
-	monkey->assign<Render>("monkey", "cube_texture");
-
 	Entity* light1 = new Entity();
-	light1->assign<Spatial>(glm::vec3(0.0f, 1.5f, 5.0f));
+	light1->assign<Spatial>(glm::vec3(0.0f, 3.0f, 0.0f));
 	light1->assign<Light>(
 		Light::Type::POINT,
 		glm::vec3(2.0f, 2.0f, 2.0f),
-		4.0f,
-		0.1f
+		1.0f,
+		0.05f
 	);
 
 	Entity* light2 = new Entity();
@@ -66,16 +67,56 @@ void Game::init() {
 	light2->assign<Light>(
 		Light::Type::SPOT,
 		glm::vec3(1.0f, 1.0f, 1.0f),
-		1.0f,
+		0.5f,
 		0.0f,
 		15.0f,
 		glm::vec3(-1.0f, 0.0f, 0.0f)
 	);
 
+	Entity* light3 = new Entity();
+	light3->assign<Spatial>(glm::vec3(0.0f, 1.0f, 5.0f));
+	light3->assign<Light>(
+		Light::Type::POINT,
+		glm::vec3(2.0f, 0.0f, 0.0f),
+		1.0f,
+		0.0f
+	);
+
+	Entity* light4 = new Entity();
+	light4->assign<Spatial>(glm::vec3(5.0f, 1.0f, 0.0f));
+	light4->assign<Light>(
+		Light::Type::POINT,
+		glm::vec3(0.0f, 2.0f, 0.0f),
+		1.0f,
+		0.0f
+	);
+
+	Entity* light5 = new Entity();
+	light5->assign<Spatial>(glm::vec3(0.0f, 1.0f, -5.0f));
+	light5->assign<Light>(
+		Light::Type::POINT,
+		glm::vec3(0.0f, 0.0f, 2.0f),
+		1.0f,
+		0.0f
+	);
+
+	Entity* light6 = new Entity();
+	light6->assign<Spatial>(glm::vec3(-5.0f, 1.0f, 0.0f));
+	light6->assign<Light>(
+		Light::Type::POINT,
+		glm::vec3(2.0f, 0.0f, 2.0f),
+		4.0f,
+		0.0f
+	);
+
+	entityManager->instantiate(plane);
 	entityManager->instantiate(cube);
-	entityManager->instantiate(monkey);
 	entityManager->instantiate(light1);
 	entityManager->instantiate(light2);
+	entityManager->instantiate(light3);
+	entityManager->instantiate(light4);
+	entityManager->instantiate(light5);
+	entityManager->instantiate(light6);
 
 	inputHandler->addKeyBinding(GLFW_KEY_Q, std::bind(&Game::quit, this));
 	inputHandler->addKeyBinding(GLFW_KEY_ESCAPE, std::bind(&Game::quit, this));

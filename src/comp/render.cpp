@@ -48,7 +48,7 @@ void Render::render() {
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->meshes[i].ebo);
 
-		texture->bind(GL_TEXTURE0);
+		texture->bind(GL_TEXTURE0 + 0);
 
 		glDrawElements(
 			GL_TRIANGLES,
