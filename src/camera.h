@@ -1,5 +1,4 @@
-#ifndef _CAMERA_H_
-#define _CAMERA_H_
+#pragma once
 
 #include <glm/vec3.hpp>
 #include <glm/geometric.hpp>
@@ -37,5 +36,3 @@ class Camera {
 		float mouseSens = 0.05f;
 		float step = 0.1f;
 };
-
-#endif

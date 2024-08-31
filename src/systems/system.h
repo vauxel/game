@@ -1,5 +1,4 @@
-#ifndef _SYSTEM_H_
-#define _SYSTEM_H_
+#pragma once
 
 #include <vector>
 #include "entity.h"
@@ -23,5 +22,3 @@ class System : public MessageHandler {
 
 		std::vector<Entity*> entities;
 };
-
-#endif

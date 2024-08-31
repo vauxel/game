@@ -1,5 +1,4 @@
-#ifndef _ENTITY_H_
-#define _ENTITY_H_
+#pragma once
 
 #include <unordered_map>
 #include "util/logger.h"
@@ -56,5 +55,3 @@ class EntityManager {
 		void instantiate(Entity* entity);
 		void registerSystem(System* system);
 };
-
-#endif

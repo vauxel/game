@@ -1,5 +1,4 @@
-#ifndef _RENDER_H_
-#define _RENDER_H_
+#pragma once
 
 #include <string>
 #include "util/logger.h"
@@ -14,5 +13,3 @@ struct Render : public Component {
 	Render(std::string modelName, std::string texName);
 	void render();
 };
-
-#endif

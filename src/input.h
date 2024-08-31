@@ -1,5 +1,4 @@
-#ifndef _INPUT_H_
-#define _INPUT_H_
+#pragma once
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -31,5 +30,3 @@ class InputHandler {
 		void handleInput(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void handleCursor(GLFWwindow* window, double xpos, double ypos);
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef _LOGGER_H_
-#define _LOGGER_H_
+#pragma once
 
 #include <stdio.h>
 #include <time.h>
@@ -63,5 +62,3 @@ static inline char* timenow() {
 	strftime(buffer, 64, "%Y-%m-%d %H:%M:%S", timeinfo);
 	return buffer;
 }
-
-#endif

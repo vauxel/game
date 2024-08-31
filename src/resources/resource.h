@@ -1,5 +1,4 @@
-#ifndef _RESOURCE_H_
-#define _RESOURCE_H_
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -39,5 +38,3 @@ class ResourceManager {
 			return (it == resources.end()) ? nullptr : dynamic_cast<T*>(it->second);
 		}
 };
-
-#endif

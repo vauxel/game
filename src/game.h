@@ -1,5 +1,4 @@
-#ifndef _GAME_H_
-#define _GAME_H_
+#pragma once
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -45,5 +44,3 @@ class Game {
 		void init();
 		void loop();
 };
-
-#endif

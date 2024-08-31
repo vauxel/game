@@ -1,5 +1,4 @@
-#ifndef _SHADER_H_
-#define _SHADER_H_
+#pragma once
 
 #include <sstream>
 #include <fstream>
@@ -15,5 +14,3 @@ class Shader : public Resource {
 		void unload();
 		GLuint getUniformLocation(const char* uniform);
 };
-
-#endif

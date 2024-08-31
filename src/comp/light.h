@@ -1,5 +1,4 @@
-#ifndef _LIGHT_H_
-#define _LIGHT_H_
+#pragma once
 
 #include <glm/vec3.hpp>
 #include "entity.h"
@@ -45,5 +44,3 @@ struct Light : public Component {
 		glm::vec3 coneDirection
 	): type(type), intensities(intensities), attenuation(attenuation), ambientCoefficient(ambientCoefficient), coneAngle(coneAngle), coneDirection(coneDirection) {};
 };
-
-#endif

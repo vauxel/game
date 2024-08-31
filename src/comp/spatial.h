@@ -1,5 +1,4 @@
-#ifndef _SPATIAL_H_
-#define _SPATIAL_H_
+#pragma once
 
 #include <glm/vec3.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -24,5 +23,3 @@ struct Spatial : public Component {
 
 	Spatial(): position(0.0f), rotation(0.0f, 0.0f, 0.0f, 0.0f), velocity(0.0f), angularVel(0.0f, 0.0f, 0.0f, 0.0f) {};
 };
-
-#endif

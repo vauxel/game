@@ -1,5 +1,4 @@
-#ifndef _MODEL_H_
-#define _MODEL_H_
+#pragma once
 
 #include <fstream>
 #include <cstring>
@@ -46,5 +45,3 @@ class Model : public Resource {
 		void initMesh(unsigned int index, const aiMesh* paiMesh);
 		void clear();
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef _RENDERSYSTEM_H_
-#define _RENDERSYSTEM_H_
+#pragma once
 
 #include <cstdio>
 #include <GL/glew.h>
@@ -38,5 +37,3 @@ class RenderSystem : public System {
 		void moveLight1ToCamera();
 		void moveLight2ToCamera();
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef _MESSAGE_H_
-#define _MESSAGE_H_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -32,5 +31,3 @@ class MessageDispatcher {
 		MessageDispatcher();
 		~MessageDispatcher();
 };
-
-#endif

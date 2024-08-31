@@ -1,5 +1,4 @@
-#ifndef _CONTROLSYSTEM_H_
-#define _CONTROLSYSTEM_H_
+#pragma once
 
 #include "system.h"
 #include "input.h"
@@ -19,5 +18,3 @@ class ControlSystem : public System {
 		virtual void loop();
 		virtual void handleMessage(MessageType type, Message* msg);
 };
-
-#endif
