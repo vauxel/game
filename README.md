@@ -2,13 +2,11 @@
 
 "Game" is a prototype of a game engine. It features a modified entity-component-system, intra-messaging, rendering using GLFW, model loading using Assimp, and positional and directional lighting.
 
-## Building & Running (Linux)
+## Building & Running (Windows)
 
-Ensure that the `Assimp` and `GLFW` packages are installed on your system.
+Run: `make` from the base directory.
 
-Afterwards, simply run: `make` from the base directory.
-
-To start the program, run `./build/game` from the base directory.
+To start the program, run `./bin/game.exe` from the base directory.
 
 ## Screenshot(s)
 
