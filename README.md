@@ -4,7 +4,7 @@
 
 ## Building & Running (Linux)
 
-Ensure that the `SOIL`, `Assimp`, and `GLFW` packages are installed on your system.
+Ensure that the `Assimp` and `GLFW` packages are installed on your system.
 
 Afterwards, simply run: `make` from the base directory.
 

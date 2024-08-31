@@ -1,9 +1,7 @@
-#ifndef _TEXTURE_H_
-#define _TEXTURE_H_
+#pragma once
 
 #include <iostream>
 #include <GL/glew.h>
-#include <SOIL.h>
 #include "util/logger.h"
 #include "resource.h"
 
@@ -19,5 +17,3 @@ class Texture : public Resource {
 		int width, height;
 		GLuint id;
 };
-
-#endif

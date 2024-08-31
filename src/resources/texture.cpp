@@ -1,16 +1,13 @@
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #include "texture.h"
 
 int Texture::load() {
 	glGenTextures(1, &this->id);
 	glBindTexture(GL_TEXTURE_2D, this->id);
 
-	unsigned char* image = SOIL_load_image(
-		resourcePath,
-		&this->width,
-		&this->height,
-		0,
-		SOIL_LOAD_RGB
-	);
+	unsigned char* image = stbi_load(resourcePath, &this->width, &this->height, 0, 3); // 3 = RGB, 4 = RGBA
 
 	glTexImage2D(
 		GL_TEXTURE_2D,
@@ -27,7 +24,7 @@ int Texture::load() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
-	SOIL_free_image_data(image);
+	stbi_image_free(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
 	LOG_DEBUG("Texture loaded: %s", resourcePath);
