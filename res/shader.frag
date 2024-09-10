@@ -26,18 +26,18 @@ vec3 calcLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, vec
 	vec3 surfaceToLight;
 	float attenuation = 1.0;
 
-	if(light.type == 0) { // Directional light
+	if (light.type == 0) { // Directional light
 		surfaceToLight = normalize(light.position.xyz);
-	} else if(light.type == 1 || light.type == 2) { // Point/Spot light
+	} else if (light.type == 1 || light.type == 2) { // Point/Spot light
 		// Point light
 		surfaceToLight = normalize(light.position.xyz - surfacePos);
 		float distanceToLight = length(light.position.xyz - surfacePos);
 		attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
 
 		// Spot light
-		if(light.type == 2) {
+		if (light.type == 2) {
 			float lightToSurfaceAngle = degrees(acos(dot(-surfaceToLight, normalize(light.coneDirection))));
-			if(lightToSurfaceAngle > light.coneAngle){
+			if (lightToSurfaceAngle > light.coneAngle){
 				attenuation = 0.0;
 			}
 		}

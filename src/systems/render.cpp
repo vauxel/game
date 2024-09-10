@@ -15,6 +15,7 @@ RenderSystem::RenderSystem(GLFWwindow* win, Camera* cam) {
 	ResourceManager::instance()->loadResource(new Shader, "shader", "res/shader");
 	shader = ResourceManager::instance()->getResource<Shader>("shader");
 
+	InputHandler::instance()->addKeyBinding(GLFW_KEY_3, std::bind(&RenderSystem::createNewLightAtCamera, this));
 	InputHandler::instance()->addKeyBinding(GLFW_KEY_1, std::bind(&RenderSystem::moveLight1ToCamera, this));
 	InputHandler::instance()->addKeyBinding(GLFW_KEY_2, std::bind(&RenderSystem::moveLight2ToCamera, this));
 }
@@ -44,7 +45,7 @@ void RenderSystem::updateModelMatrix(glm::vec3 pos, glm::quat rot) {
 	modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, pos);
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f));
-	//modelMatrix = glm::rotate(modelMatrix, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+	// modelMatrix = glm::rotate(modelMatrix, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 	modelMatrix *= glm::mat4_cast(rot);
 
 	glUniformMatrix4fv(shader->getUniformLocation("model"), 1, GL_FALSE, &modelMatrix[0][0]);
@@ -125,12 +126,12 @@ void RenderSystem::loop() {
 }
 
 void RenderSystem::attachEntity(Entity* entity) {
-	if(entity->has<Render>() && entity->has<Spatial>()) {
+	if (entity->has<Render>() && entity->has<Spatial>()) {
 		LOG_DEBUG("Attached render entity [id=%d]", entity->getId());
 		entities.push_back(entity);
 	}
 	
-	if(entity->has<Light>()) {
+	if (entity->has<Light>()) {
 		LOG_DEBUG("Attached light entity [id=%d]", entity->getId());
 		lights.push_back(entity);
 	}
@@ -150,4 +151,17 @@ void RenderSystem::moveLight2ToCamera() {
 	lights[1]->get<Spatial>()->position = pos;
 	lights[1]->get<Light>()->coneDirection = target;
 	LOG_DEBUG("Set light 2 pos to [%f %f %f] [%f %f %f]", pos.x, pos.y, pos.z, target.x, target.y, target.z);
+}
+
+void RenderSystem::createNewLightAtCamera() {
+	glm::vec3 pos = camera->getPos();
+	Entity* newLight = new Entity();
+	newLight->assign<Spatial>(pos);
+	newLight->assign<Light>(
+		Light::Type::POINT,
+		glm::vec3(2.0f, 2.0f, 2.0f),
+		1.0f,
+		0.05f
+	);
+	EntityManager::instance()->instantiate(newLight);
 }

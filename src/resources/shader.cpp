@@ -33,7 +33,7 @@ int Shader::load() {
 	glCompileShader(vertex);
 
 	glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
-	if(!success) {
+	if (!success) {
 		glGetShaderInfoLog(vertex, 512, NULL, infoLog);
 		LOG_ERROR("Vertex shader failed to compile: %s", infoLog);
 	} else {
@@ -45,7 +45,7 @@ int Shader::load() {
 	glCompileShader(fragment);
 
 	glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
-	if(!success) {
+	if (!success) {
 		glGetShaderInfoLog(fragment, 512, NULL, infoLog);
 		LOG_ERROR("Fragment shader failed to compile: %s", infoLog);
 	} else {
@@ -55,11 +55,11 @@ int Shader::load() {
 	program = glCreateProgram();
 	glAttachShader(program, vertex);
 	glAttachShader(program, fragment);
-	glBindFragDataLocation(program, 0, "outColor");
+	glBindFragDataLocation(program, 0, "fragColor");
 	glLinkProgram(program);
 
 	glGetProgramiv(program, GL_LINK_STATUS, &success);
-	if(!success) {
+	if (!success) {
 		glGetShaderInfoLog(program, 512, NULL, infoLog);
 		LOG_ERROR("Shader program failed to link: %s", infoLog);
 	} else {

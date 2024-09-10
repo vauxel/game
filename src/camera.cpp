@@ -29,7 +29,7 @@ void Camera::moveRight() {
 }
 
 void Camera::moveFromMouse(double xpos, double ypos) {
-	if(mouseLastX == 0.0 || mouseLastY == 0.0) {
+	if (mouseLastX == 0.0 || mouseLastY == 0.0) {
 		mouseLastX = xpos;
 		mouseLastY = ypos;
 	}
@@ -42,11 +42,11 @@ void Camera::moveFromMouse(double xpos, double ypos) {
 	yaw += xoffset;
 	pitch += yoffset;
 
-	if(pitch > 89.0f) {
+	if (pitch > 89.0f) {
 		pitch = 89.0f;
 	}
 
-	if(pitch < -89.0f) {
+	if (pitch < -89.0f) {
 		pitch = -89.0f;
 	}
 

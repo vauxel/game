@@ -1,16 +1,15 @@
 {
-    "version": "0.2.0",
     "configurations": [
         {
             "name": "Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/game.exe",
+            "program": "${workspaceFolder}\\bin\\game.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false,
+            "externalConsole": true,
             "MIMode": "gdb",
             "miDebuggerPath": "C:\\msys64\\mingw64\\bin\\gdb.exe",
             "setupCommands": [
@@ -27,5 +26,6 @@
             ],
             "preLaunchTask": "Run Makefile"
         }
-    ]
+    ],
+    "version": "2.0.0"
 }

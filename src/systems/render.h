@@ -36,4 +36,5 @@ class RenderSystem : public System {
 		virtual void handleMessage(MessageType type, Message* msg);
 		void moveLight1ToCamera();
 		void moveLight2ToCamera();
+		void createNewLightAtCamera();
 };

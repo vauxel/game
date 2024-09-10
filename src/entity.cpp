@@ -4,7 +4,7 @@ EntityManager* EntityManager::_instance = 0;
 EntityManager::EntityManager() {}
 
 EntityManager* EntityManager::instance() {
-	if(_instance == 0) {
+	if (_instance == 0) {
 		_instance = new EntityManager();
 	}
 
@@ -38,7 +38,7 @@ unsigned int Entity::getId() {
 }
 
 void Entity::setId(unsigned int id) {
-	if(!entityId) {
+	if (!entityId) {
 		entityId = id;
 	}
 }

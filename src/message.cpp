@@ -5,7 +5,7 @@ MessageDispatcher::MessageDispatcher() { }
 MessageDispatcher::~MessageDispatcher() { }
 
 MessageDispatcher* MessageDispatcher::instance() {
-	if(_instance == 0) {
+	if (_instance == 0) {
 		_instance = new MessageDispatcher();
 	}
 

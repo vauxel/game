@@ -7,10 +7,10 @@ int Model::load() {
 
 	int ret = -1;
 
-	if(pScene) {
+	if (pScene) {
 		ret = init(pScene);
 
-		if(ret != 0) {
+		if (ret != 0) {
 			LOG_ERROR("Failed to initialize model: %s", resourcePath);
 		}
 	} else {
@@ -44,8 +44,8 @@ void Model::initMesh(unsigned int index, const aiMesh* paiMesh) {
 
 	for(unsigned int i = 0; i < paiMesh->mNumVertices; i++) {
 		aiVector3D* pPos = &(paiMesh->mVertices[i]);
-        aiVector3D* pNormal = &(paiMesh->mNormals[i]);
-        aiVector3D* pTexCoord = &(paiMesh->HasTextureCoords(0) ? paiMesh->mTextureCoords[0][i] : zero3d);
+		aiVector3D* pNormal = &(paiMesh->mNormals[i]);
+		aiVector3D* pTexCoord = &(paiMesh->HasTextureCoords(0) ? paiMesh->mTextureCoords[0][i] : zero3d);
 
 		Vertex v(
 			glm::vec3(pPos->x, pPos->y, pPos->z),
@@ -99,11 +99,11 @@ Model::Mesh::Mesh() {
 }
 
 Model::Mesh::~Mesh() {
-	if(vbo != GL_INVALID_VALUE) {
+	if (vbo != GL_INVALID_VALUE) {
 		glDeleteBuffers(1, &vbo);
 	}
 
-	if(ebo != GL_INVALID_VALUE) {
+	if (ebo != GL_INVALID_VALUE) {
 		glDeleteBuffers(1, &ebo);
 	}
 }

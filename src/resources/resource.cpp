@@ -4,7 +4,7 @@ ResourceManager* ResourceManager::_instance = 0;
 ResourceManager::ResourceManager() {}
 
 ResourceManager* ResourceManager::instance() {
-	if(_instance == 0) {
+	if (_instance == 0) {
 		_instance = new ResourceManager();
 	}
 
@@ -17,7 +17,7 @@ void ResourceManager::loadResource(Resource* res, std::string name, std::string 
 
 	int result = res->load();
 
-	if(result == 0) {
+	if (result == 0) {
 		resources.emplace(name, res);
 	} else {
 		delete res;

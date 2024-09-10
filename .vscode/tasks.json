@@ -3,16 +3,17 @@
       {
           "type": "shell",
           "label": "Run Makefile",
-          "command": "make",
-          "args": [],
+          "command": "msys2_shell.cmd",
+          "args": ["-defterm", "-mingw64", "-no-start", "-here", "-c", "make"],
           "problemMatcher": [],
           "options": {
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
           },
           "presentation": {
             "panel": "dedicated",
             "focus": true,
-          }
+            "showReuseMessage": false
+          },
       }
   ],
   "version": "2.0.0"

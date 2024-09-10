@@ -4,16 +4,17 @@ Render::Render(std::string modelName, std::string texName) {
 	model = ResourceManager::instance()->getResource<Model>(modelName);
 	texture = ResourceManager::instance()->getResource<Texture>(texName);
 
-	if(model == nullptr) {
+	if (model == nullptr) {
 		LOG_ERROR("Failed to load render model: %s", modelName.c_str());
 	}
 
-	if(texture == nullptr) {
+	if (texture == nullptr) {
 		LOG_ERROR("Failed to load render texture: %s", texName.c_str());
 	}
 }
 
 void Render::render() {
+	// Can potentially optimize by moving the following 3 calls to mesh init only? Possible?
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
@@ -24,7 +25,8 @@ void Render::render() {
 		glVertexAttribPointer(
 			0,
 			3,
-			GL_FLOAT, GL_FALSE,
+			GL_FLOAT,
+			GL_FALSE,
 			sizeof(Vertex),
 			(GLvoid*)offsetof(Vertex, pos)
 		);
@@ -32,7 +34,8 @@ void Render::render() {
 		glVertexAttribPointer(
 			1,
 			2,
-			GL_FLOAT, GL_FALSE,
+			GL_FLOAT,
+			GL_FALSE,
 			sizeof(Vertex),
 			(GLvoid*)offsetof(Vertex, uv)
 		);

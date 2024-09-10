@@ -1,5 +1,5 @@
 CXX						:= g++
-CXXFLAGS			:= -g -Wall -Wl,-rpath=lib/
+CXXFLAGS			:= -std=c++20 -g -Wall -Wl,-rpath=lib/
 UNAME					:= $(shell uname)
 LDFLAGS				:= -Llib/ -lopengl32 -lglfw3 -lglew32 -lassimp
 BUILD					:= ./bin

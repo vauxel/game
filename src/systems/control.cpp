@@ -15,20 +15,20 @@ ControlSystem::ControlSystem(Camera* cam) {
 ControlSystem::~ControlSystem() {}
 
 void ControlSystem::loop() {
-	if(cameraControl) {
-		if(InputHandler::instance()->isKeyPressed(GLFW_KEY_W)) {
+	if (cameraControl) {
+		if (InputHandler::instance()->isKeyPressed(GLFW_KEY_W)) {
 			camera->moveForward();
 		}
 
-		if(InputHandler::instance()->isKeyPressed(GLFW_KEY_S)) {
+		if (InputHandler::instance()->isKeyPressed(GLFW_KEY_S)) {
 			camera->moveBackward();
 		}
 
-		if(InputHandler::instance()->isKeyPressed(GLFW_KEY_A)) {
+		if (InputHandler::instance()->isKeyPressed(GLFW_KEY_A)) {
 			camera->moveLeft();
 		}
 
-		if(InputHandler::instance()->isKeyPressed(GLFW_KEY_D)) {
+		if (InputHandler::instance()->isKeyPressed(GLFW_KEY_D)) {
 			camera->moveRight();
 		}
 	}

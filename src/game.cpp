@@ -4,13 +4,13 @@ Game* Game::_instance = 0;
 Game::Game() {}
 
 Game::~Game() {
-	if(window) {
+	if (window) {
 		glfwTerminate();
 	}
 }
 
 Game* Game::instance() {
-	if(_instance == 0) {
+	if (_instance == 0) {
 		_instance = new Game();
 	}
 
@@ -127,17 +127,17 @@ void Game::init() {
 void Game::initGLFW() {
 	glfwSetErrorCallback(handleGLFWError);
 
-	if(!glfwInit()) {
+	if (!glfwInit()) {
 		exit(EXIT_FAILURE);
 	}
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	window = glfwCreateWindow(width, height, "Game", NULL, NULL);
-	if(!window) {
+	if (!window) {
 		LOG_ERROR("GLFW window failed to be instantiated");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
@@ -148,7 +148,7 @@ void Game::initGLFW() {
 	glfwMakeContextCurrent(window);
 
 	glewExperimental = GL_TRUE;
-	if(glewInit() != GLEW_OK) {
+	if (glewInit() != GLEW_OK) {
 		LOG_ERROR("GLEW failed to be initialized");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
@@ -165,7 +165,7 @@ void Game::loop() {
 		inputHandler->update();
 		controlSystem->loop();
 		renderSystem->loop();
-		
+
 		running = !glfwWindowShouldClose(window);
 	}
 }
@@ -181,6 +181,7 @@ void Game::handleGLFWError(int error, const char* description) {
 void Game::handleInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	InputHandler::instance()->handleInput(window, key, scancode, action, mods);
 }
+
 void Game::handleCursor(GLFWwindow* window, double xpos, double ypos) {
 	InputHandler::instance()->handleCursor(window, xpos, ypos);
 }

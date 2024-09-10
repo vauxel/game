@@ -11,6 +11,7 @@
 #include "entity.h"
 #include "comp/render.h"
 #include "comp/spatial.h"
+#include "camera.h"
 
 #define LOG_LEVEL LOG_LVL_DEBUG
 

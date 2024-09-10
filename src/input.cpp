@@ -11,7 +11,7 @@ InputHandler::InputHandler() {
 InputHandler::~InputHandler() {}
 
 InputHandler* InputHandler::instance() {
-	if(_instance == 0) {
+	if (_instance == 0) {
 		_instance = new InputHandler();
 	}
 
@@ -37,17 +37,17 @@ bool InputHandler::isKeyPressed(int key) {
 }
 
 void InputHandler::handleInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	if(key == GLFW_KEY_UNKNOWN) {
+	if (key == GLFW_KEY_UNKNOWN) {
 		return;
 	}
 
-	if(action == GLFW_PRESS) {
+	if (action == GLFW_PRESS) {
 		pressed[key] = true;
-	} else if(action == GLFW_RELEASE) {
+	} else if (action == GLFW_RELEASE) {
 		pressed[key] = false;
 	}
 
-	if(action == GLFW_PRESS || action == GLFW_REPEAT) {
+	if (action == GLFW_PRESS || action == GLFW_REPEAT) {
 		for(KeyCallback& callback : keyBindings[key]) {
 			callback(key, action, mods);
 		}
