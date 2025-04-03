@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "Debug",
+            "name": "Debug (Windows)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}\\bin\\game.exe",
@@ -24,7 +24,16 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Run Makefile"
+            "preLaunchTask": "Run Makefile (Windows)"
+        },
+        {
+            "name": "Debug (Mac)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/game",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "Run Makefile (Mac)"
         }
     ],
     "version": "2.0.0"

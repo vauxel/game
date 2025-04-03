@@ -1,6 +1,6 @@
 # Game
 
-"Game" is a prototype of a game engine. It features a modified entity-component-system, intra-messaging, rendering using GLFW, model loading using Assimp, and positional and directional lighting.
+"Game" is a prototype of a game engine. It features a modified entity-component-system, intra-messaging, rendering using [GLFW](https://www.glfw.org/), OBJ model loading, and positional and directional lighting.
 
 ## Building & Running (Windows)
 
@@ -9,6 +9,17 @@ Install the `MinGW64` environment ([gcc](https://packages.msys2.org/package/ming
 Run: `make` from the base directory.
 
 To start the program, run the `game.exe` executable found within the `bin` directory.
+
+## Building & Running (Mac)
+
+### Prerequisites
+
+```sh
+brew install gcc
+brew install make
+```
+
+Run: `gmake` from the base directory.
 
 ## Screenshot(s)
 

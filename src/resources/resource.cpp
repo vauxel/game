@@ -20,6 +20,7 @@ void ResourceManager::loadResource(Resource* res, std::string name, std::string 
 	if (result == 0) {
 		resources.emplace(name, res);
 	} else {
+		LOG_ERROR("Failed to load resource \"%s\" at \"%s\"", name.c_str(), path.c_str());
 		delete res;
 	}
 }

@@ -1,7 +1,13 @@
+ifeq ($(OS),Windows_NT)
 CXX						:= g++
-CXXFLAGS			:= -std=c++20 -g -Wall -Wl,-rpath=lib/
+CXXFLAGS			:= -std=c++20 -g -Wall -Wl,-rpath=lib/windows
+LDFLAGS				:= -Llib/windows -lopengl32 -lglfw3 -lglew32
+else
+CXX						:= clang++
+CXXFLAGS			:= -std=c++20 -g -Wall -mmacosx-version-min=14.3
+LDFLAGS				:= -Llib/mac -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo -lglfw3 -lglew
+endif
 UNAME					:= $(shell uname)
-LDFLAGS				:= -Llib/ -lopengl32 -lglfw3 -lglew32 -lassimp
 BUILD					:= ./bin
 OBJ_DIR				:= $(BUILD)/objects
 APP_DIR				:= $(BUILD)

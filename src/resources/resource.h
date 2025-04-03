@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include "util/logger.h"
 using namespace std;
 
 class Resource {

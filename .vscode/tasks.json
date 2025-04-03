@@ -2,7 +2,7 @@
   "tasks": [
       {
           "type": "shell",
-          "label": "Run Makefile",
+          "label": "Run Makefile (Windows)",
           "command": "msys2_shell.cmd",
           "args": ["-defterm", "-mingw64", "-no-start", "-here", "-c", "make"],
           "problemMatcher": [],
@@ -14,7 +14,22 @@
             "focus": true,
             "showReuseMessage": false
           },
-      }
+      },
+      {
+        "type": "shell",
+        "label": "Run Makefile (Mac)",
+        "command": "make",
+        "args": [],
+        "problemMatcher": [],
+        "options": {
+          "cwd": "${workspaceFolder}",
+        },
+        "presentation": {
+          "panel": "dedicated",
+          "focus": true,
+          "showReuseMessage": false
+        },
+    }
   ],
   "version": "2.0.0"
 }

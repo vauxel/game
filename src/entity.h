@@ -5,6 +5,8 @@
 #include "systems/system.h"
 
 struct Component {
+	bool ready = false;
+
 	virtual ~Component() = default;
 };
 
