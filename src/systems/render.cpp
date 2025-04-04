@@ -58,45 +58,45 @@ void RenderSystem::updateLightingUniforms() {
 
 	char uniformName[100];
 	for(unsigned int i = 0; i < lights.size(); i++) {
-		sprintf(uniformName, "lights[%d].type", i);
+		snprintf(uniformName, 99, "lights[%d].type", i);
 		glUniform1i(
 			shader->getUniformLocation(uniformName),
 			lights[i]->get<Light>()->type
 		);
 
-		sprintf(uniformName, "lights[%d].position", i);
+		snprintf(uniformName, 99, "lights[%d].position", i);
 		glUniform3fv(
 			shader->getUniformLocation(uniformName),
 			1,
 			&lights[i]->get<Spatial>()->position[0]
 		);
 
-		sprintf(uniformName, "lights[%d].intensities", i);
+		snprintf(uniformName, 99, "lights[%d].intensities", i);
 		glUniform3fv(
 			shader->getUniformLocation(uniformName),
 			1,
 			&lights[i]->get<Light>()->intensities[0]
 		);
 		
-		sprintf(uniformName, "lights[%d].attenuation", i);
+		snprintf(uniformName, 99, "lights[%d].attenuation", i);
 		glUniform1f(
 			shader->getUniformLocation(uniformName),
 			lights[i]->get<Light>()->attenuation
 		);
 
-		sprintf(uniformName, "lights[%d].ambientCoefficient", i);
+		snprintf(uniformName, 99, "lights[%d].ambientCoefficient", i);
 		glUniform1f(
 			shader->getUniformLocation(uniformName),
 			lights[i]->get<Light>()->ambientCoefficient
 		);
 
-		sprintf(uniformName, "lights[%d].coneAngle", i);
+		snprintf(uniformName, 99, "lights[%d].coneAngle", i);
 		glUniform1f(
 			shader->getUniformLocation(uniformName),
 			lights[i]->get<Light>()->coneAngle
 		);
 
-		sprintf(uniformName, "lights[%d].coneDirection", i);
+		snprintf(uniformName, 99, "lights[%d].coneDirection", i);
 		glUniform3fv(
 			shader->getUniformLocation(uniformName),
 			1,

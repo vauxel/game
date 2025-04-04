@@ -25,7 +25,11 @@ void Render::render() {
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 
-	for(unsigned int i = 0; i < model->numMeshes; i++) {
+	for (unsigned int i = 0; i < model->numMeshes; i++) {
+		if (model->meshes[i].vbo == GL_INVALID_VALUE || model->meshes[i].ebo == GL_INVALID_VALUE) {
+			continue;
+		}
+
 		glBindBuffer(GL_ARRAY_BUFFER, model->meshes[i].vbo);
 
 		glVertexAttribPointer(

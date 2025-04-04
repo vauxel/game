@@ -116,13 +116,9 @@ int OBJLoader::loadOBJFile(const char* path) {
       }
 
       for (size_t ti = 0; ti < faceTriples.size(); ti++) {
-        currMesh->vertices.push_back(
-          Vertex(
-            currMesh->rawVertices[faceTriples[ti].x - 1],
-            faceTriples[ti].y != 0 ? currMesh->rawUVs[faceTriples[ti].y - 1] : glm::vec3(0, 0, 0),
-            faceTriples[ti].z != 0 ? currMesh->rawNormals[faceTriples[ti].z - 1] : glm::vec3(0, 0, 0)
-          )
-        );
+        unsigned int vertexIndex = 0;
+        this->resolveVertex(currMesh, faceTriples[ti], vertexIndex);
+        currMesh->indices.push_back(vertexIndex);
       }
 
       continue;
@@ -176,6 +172,24 @@ bool OBJLoader::parseFaceTriple(const char** token, int& vIdx, int& uvIdx, int& 
   }
 
   return true;
+}
+
+void OBJLoader::resolveVertex(MeshData* mesh, glm::vec3& originalIndices, unsigned int& vertexIndex) {
+  Vertex newVertex = Vertex(
+    mesh->rawVertices[originalIndices.x - 1],
+    originalIndices.y != 0 ? mesh->rawUVs[originalIndices.y - 1] : glm::vec3(0, 0, 0),
+    originalIndices.z != 0 ? mesh->rawNormals[originalIndices.z - 1] : glm::vec3(0, 0, 0)
+  );
+
+  for (size_t i = 0; i < mesh->vertices.size(); i++) {
+    if (mesh->vertices[i] == newVertex) {
+      vertexIndex = i;
+      return;
+    }
+  }
+
+  mesh->vertices.push_back(newVertex);
+  vertexIndex = mesh->vertices.size() - 1;
 }
 
 void OBJLoader::flushMeshData(MeshData** mesh, std::vector<MeshData*>& meshes) {

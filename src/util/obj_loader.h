@@ -32,6 +32,7 @@ class OBJLoader {
 
     float parseFloat(const char** token);
     bool parseFaceTriple(const char** token, int& vIdx, int& uvIdx, int& normIdx);
+    void resolveVertex(MeshData* mesh, glm::vec3& originalIndices, unsigned int& vertexIndex);
     void flushMeshData(MeshData** mesh, std::vector<MeshData*>& meshes);
   public:
     int loadOBJFile(const char* path);

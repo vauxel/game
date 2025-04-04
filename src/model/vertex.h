@@ -13,4 +13,12 @@ struct Vertex {
 		uv = uvCoord;
 		normal = normalCoord;
 	}
+
+	bool operator==(const Vertex& other) const {
+		return (
+			this->pos == other.pos
+			&& this->uv == other.uv
+			&& this->normal == other.normal
+		);
+	}
 };
