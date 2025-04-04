@@ -11,7 +11,7 @@ class Resource {
 		unsigned int resourceId;
 		const char* resourcePath;
 	public:
-		virtual ~Resource() {};
+		virtual ~Resource() = default;
 
 		virtual int load() = 0;
 		virtual void unload() = 0;

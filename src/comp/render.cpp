@@ -25,8 +25,8 @@ void Render::render() {
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 
-	for(unsigned int i = 0; i < model->meshes->size(); i++) {
-		glBindBuffer(GL_ARRAY_BUFFER, model->meshes->at(i).vbo);
+	for(unsigned int i = 0; i < model->numMeshes; i++) {
+		glBindBuffer(GL_ARRAY_BUFFER, model->meshes[i].vbo);
 
 		glVertexAttribPointer(
 			0,
@@ -55,13 +55,13 @@ void Render::render() {
 			(GLvoid*)offsetof(Vertex, normal)
 		);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->meshes->at(i).ebo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->meshes[i].ebo);
 
 		texture->bind(GL_TEXTURE0 + 0);
 
 		glDrawElements(
 			GL_TRIANGLES,
-			model->meshes->at(i).indicesCount,
+			model->meshes[i].indicesCount,
 			GL_UNSIGNED_INT,
 			0
 		);

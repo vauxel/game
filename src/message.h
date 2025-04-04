@@ -11,7 +11,7 @@ enum MessageType {
 };
 
 struct Message {
-	virtual ~Message() {};
+	virtual ~Message() = default;
 };
 
 class MessageHandler {

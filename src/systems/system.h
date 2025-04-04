@@ -8,10 +8,11 @@ class Entity;
 
 class System : public MessageHandler {
 	public:
-		virtual ~System() {};
+		virtual ~System() = default;
+
 		virtual void attachEntity(Entity* entity) = 0;
 		virtual void detachEntity(Entity* entity) {
-			for(unsigned int i = 0; i < entities.size(); i++) {
+			for (unsigned int i = 0; i < entities.size(); i++) {
 				if (entities[i] == entity) {
 					entities.erase(entities.begin() + i);
 					break;

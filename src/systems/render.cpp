@@ -20,7 +20,9 @@ RenderSystem::RenderSystem(GLFWwindow* win, Camera* cam) {
 	InputHandler::instance()->addKeyBinding(GLFW_KEY_2, std::bind(&RenderSystem::moveLight2ToCamera, this));
 }
 
-RenderSystem::~RenderSystem() {}
+RenderSystem::~RenderSystem() {
+	this->shader->unload();
+}
 
 void RenderSystem::setCamera(Camera* cam) {
 	camera = cam;

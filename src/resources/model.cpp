@@ -3,7 +3,7 @@
 int Model::load() {
 	OBJLoader loader;
 
-	if (loader.loadFile(resourcePath)) {
+	if (loader.loadOBJFile(resourcePath)) {
 		LOG_ERROR("Failed to initialize model: %s (%s)", resourcePath, loader.getError());
 		return -1;
 	}
@@ -18,57 +18,21 @@ int Model::load() {
 }
 
 void Model::unload() {
+	delete[] this->meshes;
+	this->meshes = nullptr;
 	LOG_DEBUG("Model unloaded: %s", resourcePath);
 }
 
 int Model::init(OBJLoader& objLoader) {
-	meshes = new std::vector<Mesh>(shapes.size());
+	auto meshData = objLoader.getMeshes();
+	this->meshes = new Model::Mesh[meshData.size()];
+	this->numMeshes = meshData.size();
 
-	for (size_t s = 0; s < meshes->size(); s++) {
-		meshes->at(s) = Mesh();
-		this->initMesh(shapes[s], attrib, &meshes->at(s));
+	for (size_t i = 0; i < numMeshes; i++) {
+		this->meshes[i].init(meshData[i]->vertices, meshData[i]->indices);
 	}
 
 	return 0;
-}
-
-void Model::initMesh(const tinyobj::shape_t& shape, const tinyobj::attrib_t& attrib, Model::Mesh* mesh) {
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-
-	for (size_t v = 0; v < attrib.vertices.size(); v += 3) {
-		glm::vec3 vertCoord(
-			attrib.vertices[v + 0],
-			attrib.vertices[v + 1],
-			attrib.vertices[v + 2]
-		);
-
-		glm::vec3 normCoord;
-
-		normCoord = glm::vec3(
-			attrib.normals[v + 0],
-			attrib.normals[v + 1],
-			attrib.normals[v + 2]
-		);
-
-		glm::vec2 texCoord;
-
-		texCoord = glm::vec2(
-			attrib.texcoords[v + 0],
-			attrib.texcoords[v + 1]
-		);
-
-		Vertex vertex(vertCoord, texCoord, normCoord);
-		vertices.push_back(vertex);
-	}
-
-	for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); f++) {
-		indices.push_back(shape.mesh.indices[3 * f + 0].vertex_index);
-		indices.push_back(shape.mesh.indices[3 * f + 1].vertex_index);
-		indices.push_back(shape.mesh.indices[3 * f + 2].vertex_index);
-	}
-
-	mesh->init(vertices, indices);
 }
 
 void Model::Mesh::init(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {

@@ -40,14 +40,15 @@ void Game::init() {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, handleCursor);
 
-	resourceManager->loadResource(new Texture(), "checker", "res/checker.png");
-	resourceManager->loadResource(new Model(), "plane", "res/plane.obj");
+	// resourceManager->loadResource(new Texture(), "checker", "res/checker.png");
+	// resourceManager->loadResource(new Model(), "plane", "res/plane.obj");
 	resourceManager->loadResource(new Texture(), "cube_texture", "res/cube_texture.png");
-	resourceManager->loadResource(new Model(), "cube", "res/cube_textured.obj");
+	// resourceManager->loadResource(new Model(), "cube", "res/cube_textured.obj");
+	resourceManager->loadResource(new Model(), "cube", "res/cube.obj");
 
-	Entity* plane = new Entity();
-	plane->assign<Spatial>(glm::vec3(0.0f, 0.0f, 0.0f));
-	plane->assign<Render>("plane", "checker");
+	// Entity* plane = new Entity();
+	// plane->assign<Spatial>(glm::vec3(0.0f, 0.0f, 0.0f));
+	// plane->assign<Render>("plane", "checker");
 
 	Entity* cube = new Entity();
 	cube->assign<Spatial>(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -109,7 +110,7 @@ void Game::init() {
 		0.0f
 	);
 
-	entityManager->instantiate(plane);
+	// entityManager->instantiate(plane);
 	entityManager->instantiate(cube);
 	entityManager->instantiate(light1);
 	entityManager->instantiate(light2);

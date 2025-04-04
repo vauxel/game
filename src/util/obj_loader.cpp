@@ -1,6 +1,6 @@
 #include "obj_loader.h"
 
-int OBJLoader::loadFile(const char* path) {
+int OBJLoader::loadOBJFile(const char* path) {
   std::ifstream fileStream(path);
 
   if (!fileStream) {
@@ -8,61 +8,183 @@ int OBJLoader::loadFile(const char* path) {
     return -1;
   }
 
-  std::string lineString;
-  size_t lineNum = 1;
-  while (std::getline(fileStream, lineString)) {
-    std::stringstream ss(lineString);
-    std::string operation;
+  MeshData* currMesh = new MeshData();
 
-    ss >> operation;
-
-    if (operation == "o") {
-      this->name = ss.str();
-    } else if (operation == "v") {
-      this->readVertex(ss);
-    } else if (operation == "vt") {
-      this->readUV(ss);
-    } else if (operation == "vn") {
-      this->readNormal(ss);
-    } else if (operation == "f") {
-      this->readFace(ss);
-    }
-
-    if (ss.fail()) {
-      this->error = "Failure in reading line " + lineNum;
-      return -1;
-    }
-
+  size_t lineNum = 0;
+  while (fileStream.peek() != -1) {
     lineNum++;
+    std::string lineBuffer;
+    std::getline(fileStream, lineBuffer);
+
+    if (lineBuffer.empty()) {
+      continue;
+    }
+
+    const char* token = lineBuffer.c_str();
+    token += strspn(token, " \t");
+
+    if (token[0] == '\0' || token[0] == '#') {
+      continue;
+    }
+
+    // Parse material library filename
+    if (strncmp(token, "mtllib", 6) == 0 && IS_SPACE(token[6])) {
+      token += 7;
+      token += strspn(token, " \t");
+
+      this->mtlLibName = std::string(token);
+
+      continue;
+    }
+
+    // Parse name
+    if (token[0] == 'o' && IS_SPACE(token[1])) {
+      token += 1;
+      token += strspn(token, " \t");
+
+      currMesh->objName = std::string(token);
+
+      continue;
+    }
+
+    // Parse material name
+    if (strncmp(token, "usemtl", 6) == 0 && IS_SPACE(token[6])) {
+      token += 7;
+      token += strspn(token, " \t");
+
+      currMesh->mtlName = std::string(token);
+
+      continue;
+    }
+
+    // Parse vertex
+    if (token[0] == 'v' && IS_SPACE(token[1])) {
+      token += 1;
+
+      float x = parseFloat(&token);
+      float y = parseFloat(&token);
+      float z = parseFloat(&token);
+
+      currMesh->rawVertices.push_back(glm::vec3(x, y, z));
+
+      continue;
+    }
+
+    // Parse UV
+    if (token[0] == 'v' && token[1] == 't' && IS_SPACE(token[2])) {
+      token += 2;
+
+      float x = parseFloat(&token);
+      float y = parseFloat(&token);
+
+      currMesh->rawUVs.push_back(glm::vec2(x, y));
+
+      continue;
+    }
+
+    // Parse normal
+    if (token[0] == 'v' && token[1] == 'n' && IS_SPACE(token[2])) {
+      token += 2;
+
+      float x = parseFloat(&token);
+      float y = parseFloat(&token);
+      float z = parseFloat(&token);
+
+      currMesh->rawNormals.push_back(glm::vec3(x, y, z));
+
+      continue;
+    }
+
+    // Parse face indices
+    if (token[0] == 'f' && IS_SPACE(token[1])) {
+      token += 1;
+      token += strspn(token, " \t");
+
+      std::vector<glm::vec3> faceTriples;
+
+      while (token[0] != '\0') {
+        int vIdx = 0, uvIdx = 0, normIdx = 0;
+
+        if (this->parseFaceTriple(&token, vIdx, uvIdx, normIdx)) {
+          faceTriples.push_back(glm::vec3(vIdx, uvIdx, normIdx));
+          token += strspn(token, " \t");
+        }
+      }
+
+      if (faceTriples.size() > 3) {
+        // TODO: Do triangulation
+      }
+
+      for (size_t ti = 0; ti < faceTriples.size(); ti++) {
+        currMesh->vertices.push_back(
+          Vertex(
+            currMesh->rawVertices[faceTriples[ti].x - 1],
+            faceTriples[ti].y != 0 ? currMesh->rawUVs[faceTriples[ti].y - 1] : glm::vec3(0, 0, 0),
+            faceTriples[ti].z != 0 ? currMesh->rawNormals[faceTriples[ti].z - 1] : glm::vec3(0, 0, 0)
+          )
+        );
+      }
+
+      continue;
+    }
   }
+
+  this->meshes.push_back(currMesh);
 
   fileStream.close();
   return 0;
 }
 
-void OBJLoader::readVertex(std::stringstream& lineStream) {
-  int x, y, z;
-  lineStream >> x;
-  lineStream >> y;
-  lineStream >> z;
-  this->vertices.push_back(glm::vec3(x, y, z));
+float OBJLoader::parseFloat(const char** token) {
+  (*token) += strspn(*token, " \t");
+  float i = atof(*token);
+  (*token) += strcspn(*token, " \t");
+  return i;
 }
 
-void OBJLoader::readUV(std::stringstream& lineStream) {
-  int x, y;
-  lineStream >> x;
-  lineStream >> y;
-  this->uvs.push_back(glm::vec2(x, y));
+bool OBJLoader::parseFaceTriple(const char** token, int& vIdx, int& uvIdx, int& normIdx) {
+  if (IS_SPACE((*token)[0])) {
+    return false;
+  }
+
+  vIdx = atoi(*token);
+  (*token) += strcspn(*token, "/ \t");
+
+  // i
+  if ((*token)[0] != '/') {
+    return true;
+  }
+
+  (*token)++;
+
+  // i//k
+  if ((*token)[0] == '/') {
+    (*token)++;
+    normIdx = atoi(*token);
+    (*token) += strcspn(*token, "/ \t");
+  } else {
+    // i/j
+    uvIdx = atoi(*token);
+    (*token) += strcspn(*token, "/ \t");
+    
+    // i/j/k
+    if ((*token)[0] == '/') {
+      (*token)++;
+      normIdx = atoi(*token);
+      (*token) += strcspn(*token, " \t");
+    }
+  }
+
+  return true;
 }
 
-void OBJLoader::readNormal(std::stringstream& lineStream) {
-  int x, y, z;
-  lineStream >> x;
-  lineStream >> y;
-  lineStream >> z;
-  this->vertices.push_back(glm::vec3(x, y, z));
+void OBJLoader::flushMeshData(MeshData** mesh, std::vector<MeshData*>& meshes) {
+  meshes.push_back(*mesh);
+  *mesh = new MeshData();
 }
 
-void OBJLoader::readFace(std::stringstream& lineStream) {
-  
+OBJLoader::~OBJLoader() {
+  for (size_t i = 0; i < this->meshes.size(); i++) {
+    delete this->meshes[i];
+  }
 }

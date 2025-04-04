@@ -26,9 +26,8 @@ class Model : public Resource {
 			unsigned int indicesCount;
 		};
 
-		std::vector<Mesh>* meshes;
+		Mesh* meshes;
+		size_t numMeshes = 0;
 	private:
 		int init(OBJLoader& objReader);
-		void initMesh(const tinyobj::shape_t& shape, const tinyobj::attrib_t& attrib, Model::Mesh* mesh);
-		void clear();
 };
