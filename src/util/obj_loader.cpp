@@ -13,6 +13,9 @@ int OBJLoader::loadOBJFile(const char* path) {
   size_t lineNum = 0;
   while (fileStream.peek() != -1) {
     lineNum++;
+
+    std::cout << "Reading line #" << lineNum << std::endl;
+
     std::string lineBuffer;
     std::getline(fileStream, lineBuffer);
 

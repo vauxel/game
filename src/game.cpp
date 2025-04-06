@@ -44,6 +44,7 @@ void Game::init() {
 	resourceManager->loadResource(new Model(), "plane", "res/plane.obj");
 	resourceManager->loadResource(new Texture(), "cube_texture", "res/cube_texture.png");
 	resourceManager->loadResource(new Model(), "cube", "res/cube_textured.obj");
+	resourceManager->loadResource(new Model(), "erato", "res/erato.obj");
 	// resourceManager->loadResource(new Model(), "cube", "res/cube.obj");
 
 	Entity* plane = new Entity();
@@ -53,6 +54,10 @@ void Game::init() {
 	Entity* cube = new Entity();
 	cube->assign<Spatial>(glm::vec3(0.0f, 1.0f, 0.0f));
 	cube->assign<Render>("cube", "cube_texture");
+
+	Entity* statue = new Entity();
+	statue->assign<Spatial>(glm::vec3(0.0f, 0.0f, 0.0f));
+	statue->assign<Render>("erato", "checker");
 
 	Entity* light1 = new Entity();
 	light1->assign<Spatial>(glm::vec3(0.0f, 3.0f, 0.0f));
@@ -110,8 +115,9 @@ void Game::init() {
 		0.0f
 	);
 
-	entityManager->instantiate(plane);
-	entityManager->instantiate(cube);
+	entityManager->instantiate(statue);
+	// entityManager->instantiate(plane);
+	// entityManager->instantiate(cube);
 	entityManager->instantiate(light1);
 	entityManager->instantiate(light2);
 	entityManager->instantiate(light3);
