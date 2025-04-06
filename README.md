@@ -4,7 +4,7 @@
 
 ## Building & Running (Windows)
 
-Install the `MinGW64` environment ([gcc](https://packages.msys2.org/package/mingw-w64-x86_64-gcc?repo=mingw64) / [make](https://packages.msys2.org/package/mingw-w64-x86_64-make?repo=mingw64)) via [MSYS2](https://www.msys2.org/).
+Install the `CLANG64` environment [group](https://packages.msys2.org/groups/mingw-w64-clang-x86_64-toolchain) via [MSYS2](https://www.msys2.org/).
 
 Run: `make` from the base directory.
 
@@ -15,7 +15,6 @@ To start the program, run the `game.exe` executable found within the `bin` direc
 ### Prerequisites
 
 ```sh
-brew install gcc
 brew install make
 ```
 

@@ -46,8 +46,8 @@ class OBJLoader {
     };
 
     struct FaceTripleDataHash {
-      size_t operator()(const FaceTripleData& x) const {
-        size_t res = 17;
+      unsigned long operator()(const FaceTripleData& x) const {
+        unsigned long res = 17;
         res = res * 31 + std::hash<long>()(x.vertIndex);
         res = res * 31 + std::hash<long>()(x.uvIndex);
         res = res * 31 + std::hash<long>()(x.normIndex);

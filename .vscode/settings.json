@@ -80,6 +80,12 @@
         "queue": "cpp",
         "thread": "cpp",
         "stack": "cpp",
-        "version": "cpp"
+        "version": "cpp",
+        "condition_variable": "cpp",
+        "csignal": "cpp",
+        "forward_list": "cpp",
+        "print": "cpp",
+        "shared_mutex": "cpp",
+        "unordered_set": "cpp"
     }
 }
