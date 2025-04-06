@@ -221,7 +221,7 @@ void OBJLoader::triangulateFace(MeshData* mesh, std::vector<FaceTripleData>& fac
 }
 
 inline glm::vec3 OBJLoader::calcPolyNormal(const std::vector<glm::vec3>& points) {
-  glm::vec3 normal;
+  glm::vec3 normal(0.0, 0.0, 0.0);
   const size_t n = points.size();
 
   for (size_t i = 0; i < n; i++) {
