@@ -7,6 +7,7 @@
 #include <cfloat>
 #include <sstream>
 #include <vector>
+#include <unordered_map>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 #include <glm/geometric.hpp>
@@ -24,30 +25,44 @@ class OBJLoader {
       NoTurn = 0
     };
 
-    const char* error = nullptr;
-
     struct MeshData {
       std::vector<glm::vec3> rawVertices;
       std::vector<glm::vec2> rawUVs;
       std::vector<glm::vec3> rawNormals;
       std::vector<Vertex> vertices;
-      std::vector<unsigned int> indices;
+      std::vector<unsigned long> indices;
       std::string objName = "";
       std::string mtlName = "";
     };
 
     struct FaceTripleData {
-      int vertIndex;
-      int uvIndex;
-      int normIndex;
+      long vertIndex;
+      long uvIndex;
+      long normIndex;
+
+      bool operator==(const FaceTripleData& other) const {
+        return vertIndex == other.vertIndex && uvIndex == other.uvIndex && normIndex == other.normIndex;
+      }
     };
+
+    struct FaceTripleDataHash {
+      size_t operator()(const FaceTripleData& x) const {
+        size_t res = 17;
+        res = res * 31 + std::hash<long>()(x.vertIndex);
+        res = res * 31 + std::hash<long>()(x.uvIndex);
+        res = res * 31 + std::hash<long>()(x.normIndex);
+        return res;
+      }
+    };
+
+    const char* error = nullptr;
 
     std::string mtlLibName = "";
     std::vector<MeshData*> meshes;
 
     float parseFloat(const char** token);
-    bool parseFaceTriple(const char** token, int& vIdx, int& uvIdx, int& normIdx);
-    void resolveVertex(MeshData* mesh, FaceTripleData& originalIndices, unsigned int& vertexIndex);
+    bool parseFaceTriple(const char** token, long& vIdx, long& uvIdx, long& normIdx);
+    unsigned long resolveVertex(MeshData* mesh, std::unordered_map<FaceTripleData, unsigned long, FaceTripleDataHash>& vertexMap, FaceTripleData& originalIndices);
     void triangulateFace(MeshData* mesh, std::vector<FaceTripleData>& faceTriples);
     void triangulateFaceFan(std::vector<FaceTripleData>& faceTriples);
     void triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, std::vector<glm::vec3>& polyPoints, const glm::vec3& normalPoint);

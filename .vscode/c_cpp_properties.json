@@ -22,7 +22,8 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "cppStandard": "c++20"
+            "cppStandard": "c++20",
+            "compilerPath": "c:\\msys64\\mingw64\\bin\\g++.exe"
         },
         {
             "name": "Mac",

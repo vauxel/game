@@ -1,5 +1,4 @@
 {
-    "C_Cpp.default.compilerPath": "/opt/homebrew/bin/g++-14",
     "files.associations": {
         "functional": "cpp",
         "iostream": "cpp",

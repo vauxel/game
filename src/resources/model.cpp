@@ -35,7 +35,7 @@ int Model::init(OBJLoader& objLoader) {
 	return 0;
 }
 
-void Model::Mesh::init(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
+void Model::Mesh::init(const std::vector<Vertex>& vertices, const std::vector<unsigned long>& indices) {
 	indicesCount = indices.size();
 
 	glGenVertexArrays(1, &vao);
@@ -54,7 +54,7 @@ void Model::Mesh::init(const std::vector<Vertex>& vertices, const std::vector<un
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(
 		GL_ELEMENT_ARRAY_BUFFER,
-		sizeof(unsigned int) * indices.size(),
+		sizeof(unsigned long) * indices.size(),
 		&indices.front(),
 		GL_STATIC_DRAW
 	);

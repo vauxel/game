@@ -20,10 +20,10 @@ class Model : public Resource {
 			Mesh();
 			~Mesh();
 
-			void init(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
+			void init(const std::vector<Vertex>& vertices, const std::vector<unsigned long>& indices);
 
 			unsigned int vao, vbo, ebo;
-			unsigned int indicesCount;
+			unsigned long indicesCount;
 		};
 
 		Mesh* meshes;
