@@ -10,6 +10,7 @@ out vec4 fragColor;
 uniform sampler2D textureSampler;
 uniform mat4 camera;
 uniform mat4 model;
+uniform mat3 modelNormal;
 uniform vec3 cameraPosition;
 uniform int numLights;
 uniform struct Light {
@@ -52,7 +53,7 @@ vec3 calcLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, vec
 }
 
 void main() {
-	vec3 normal = normalize(transpose(inverse(mat3(model))) * fragNormal);
+	vec3 normal = modelNormal * fragNormal;
 	vec3 surfacePos = vec3(model * vec4(fragPosition, 1));
 	vec4 surfaceColor = texture(textureSampler, fragUV);
 	vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);

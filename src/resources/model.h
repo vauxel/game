@@ -13,6 +13,11 @@
 
 class Model : public Resource {
 	public:
+		enum class LoadingMethod {
+			RAW,
+			OBJ
+		};
+
 		int load();
 		void unload();
 

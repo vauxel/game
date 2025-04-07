@@ -88,6 +88,7 @@
         "shared_mutex": "cpp",
         "unordered_set": "cpp",
         "codecvt": "cpp",
-        "semaphore": "cpp"
+        "semaphore": "cpp",
+        "__availability": "cpp"
     }
 }

@@ -18,6 +18,7 @@ class RenderSystem : public System {
 		Camera* camera;
 		glm::mat4 cameraMatrix;
 		glm::mat4 modelMatrix;
+		glm::mat3 modelNormalMatrix;
 
 		void setCamera(Camera* cam);
 		void updateCameraMatrix(Camera* cam);

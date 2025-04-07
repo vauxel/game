@@ -47,10 +47,12 @@ void RenderSystem::updateModelMatrix(glm::vec3 pos, glm::quat rot) {
 	modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, pos);
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f));
-	// modelMatrix = glm::rotate(modelMatrix, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 	modelMatrix *= glm::mat4_cast(rot);
 
+	modelNormalMatrix = glm::mat3(glm::transpose(glm::inverse(modelMatrix)));
+
 	glUniformMatrix4fv(shader->getUniformLocation("model"), 1, GL_FALSE, &modelMatrix[0][0]);
+	glUniformMatrix3fv(shader->getUniformLocation("modelNormal"), 1, GL_FALSE, &modelNormalMatrix[0][0]);
 }
 
 void RenderSystem::updateLightingUniforms() {
