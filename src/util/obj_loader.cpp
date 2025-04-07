@@ -16,24 +16,14 @@ int OBJLoader::loadOBJFile(const char* path) {
   this->numNormalsRead = 0;
   std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash> vertexMap;
 
-  size_t lineSize = 0;
-  char* line = nullptr;
+  char line[512];
   unsigned int lineNum = 0;
-  while (true) {
-    if (line != nullptr) {
-      free(line);
-      line = nullptr;
-    }
-
-    if (getline(&line, &lineSize, file) == -1) {
-      break;
-    }
-
+  while (fgets(line, 512, file) != NULL) {
     ++lineNum;
 
-    if (lineSize == 0) {
-      continue;
-    }
+    // if (lineSize == 0) {
+    //   continue;
+    // }
 
     const char* token = line;
     token += strspn(token, " \t\n");
@@ -134,7 +124,6 @@ int OBJLoader::loadOBJFile(const char* path) {
         if (this->parseFaceTriple(&token, vIdx, uvIdx, normIdx)) {
           if (vIdx <= 0 || uvIdx <= 0 || normIdx <= 0) {
             this->error = "Unable to parse face with negative index(es)";
-            free(line);
             fclose(file);
             return -1;
           }
@@ -155,7 +144,7 @@ int OBJLoader::loadOBJFile(const char* path) {
         this->triangulateFace(currMesh, faceTriples);
 
         if (faceTriples.size() % 3 != 0) {
-          LOG_WARNING("Failed to triangulate %lu-gon face in OBJ file \"%s\" on line %u", numFaceTriples, path, lineNum);
+          LOG_WARNING("Failed to triangulate %lu-gon face in OBJ file \"%s\" on line %u", static_cast<unsigned long>(numFaceTriples), path, lineNum);
           continue;
         }
       }

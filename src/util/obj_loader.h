@@ -1,13 +1,12 @@
 #pragma once
 
-#include <cstdio>
+#define _GNU_SOURCE
+
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <cstring>
 #include <cfloat>
 #include <chrono>
-#include <sstream>
 #include <vector>
 #include <unordered_map>
 #include <glm/vec3.hpp>

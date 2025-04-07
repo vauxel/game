@@ -125,11 +125,11 @@ void Game::init() {
     0.0f
   );
 
-  // entityManager->instantiate(statue);
+  entityManager->instantiate(statue);
   // entityManager->instantiate(bike);
   // entityManager->instantiate(plane);
   // entityManager->instantiate(cube);
-  entityManager->instantiate(sponza);
+  // entityManager->instantiate(sponza);
   entityManager->instantiate(light1);
   entityManager->instantiate(light2);
   entityManager->instantiate(light3);
