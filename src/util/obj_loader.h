@@ -1,10 +1,12 @@
 #pragma once
 
+#include <cstdio>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <cstring>
 #include <cfloat>
+#include <chrono>
 #include <sstream>
 #include <vector>
 #include <unordered_map>

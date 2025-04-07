@@ -1,31 +1,38 @@
 #include "obj_loader.h"
 
 int OBJLoader::loadOBJFile(const char* path) {
-  std::ifstream fileStream(path);
+  FILE* file = fopen(path, "r");
 
-  if (!fileStream) {
+  if (file == NULL) {
     this->error = "Could not open file";
     return -1;
   }
 
-  MeshData* currMesh = new MeshData();
+  auto t_start = std::chrono::high_resolution_clock::now();
 
+  MeshData* currMesh = new MeshData();
   std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash> vertexMap;
 
+  size_t lineSize = 0;
+  char* line = nullptr;
   unsigned int lineNum = 0;
-  while (fileStream.peek() != -1) {
-    lineNum++;
+  while (true) {
+    if (line != nullptr) {
+      free(line);
+      line = nullptr;
+    }
 
-    std::cout << "Reading line #" << lineNum << std::endl;
+    if (getline(&line, &lineSize, file) == -1) {
+      break;
+    }
 
-    std::string lineBuffer;
-    std::getline(fileStream, lineBuffer);
+    ++lineNum;
 
-    if (lineBuffer.empty()) {
+    if (lineSize == 0) {
       continue;
     }
 
-    const char* token = lineBuffer.c_str();
+    const char* token = line;
     token += strspn(token, " \t");
 
     if (token[0] == '\0' || token[0] == '#') {
@@ -111,9 +118,19 @@ int OBJLoader::loadOBJFile(const char* path) {
         int vIdx = 0, uvIdx = 0, normIdx = 0;
 
         if (this->parseFaceTriple(&token, vIdx, uvIdx, normIdx)) {
+          if (vIdx <= 0 || uvIdx <= 0 || normIdx <= 0) {
+            LOG_WARNING("Unable to parse face in OBJ file \"%s\" with negative index(es) on line %u", path, lineNum);
+            break;
+          }
+
           faceTriples.push_back({ vIdx, uvIdx, normIdx });
           token += strspn(token, " \t");
         }
+      }
+
+      // This means that all of the face triples were not successfully parsed
+      if (token[0] != '\0') {
+        continue;
       }
 
       const size_t numFaceTriples = faceTriples.size();
@@ -143,7 +160,12 @@ int OBJLoader::loadOBJFile(const char* path) {
 
   this->meshes.emplace_back(currMesh);
 
-  fileStream.close();
+  auto t_end = std::chrono::high_resolution_clock::now();
+  double elapsedTime = std::chrono::duration<double, std::milli>(t_end - t_start).count();
+
+  LOG_DEBUG("Loading %s OBJ file took %fms", path, elapsedTime);
+
+  fclose(file);
   return 0;
 }
 
