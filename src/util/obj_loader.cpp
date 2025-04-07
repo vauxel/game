@@ -4,9 +4,11 @@ int OBJLoader::loadOBJFile(const char* path) {
   FILE* file = fopen(path, "r");
 
   if (file == NULL) {
-    this->error = "Could not open file";
+    this->error = "Could not open OBJ file";
     return -1;
   }
+
+  LOG_DEBUG("Started loding %s OBJ file", path);
 
   auto t_start = std::chrono::high_resolution_clock::now();
 
@@ -17,10 +19,6 @@ int OBJLoader::loadOBJFile(const char* path) {
   unsigned int lineNum = 0;
   while (fgets(line, 512, file) != NULL) {
     ++lineNum;
-
-    // if (lineSize == 0) {
-    //   continue;
-    // }
 
     const char* token = line;
     token += strspn(token, " \t\n");
@@ -49,7 +47,7 @@ int OBJLoader::loadOBJFile(const char* path) {
       currMesh->objName.pop_back(); // Remove newline character
 
       if (currMesh->vertices.size() > 0) {
-        this->flushMeshData(&currMesh, meshes);
+        this->flushMeshData(&currMesh);
       }
 
       continue;
@@ -75,7 +73,7 @@ int OBJLoader::loadOBJFile(const char* path) {
       float z = parseFloat(&token);
 
       if (currMesh->vertices.size() > 0) {
-        this->flushMeshData(&currMesh, meshes);
+        this->flushMeshData(&currMesh);
       }
 
       this->rawVertices.push_back(glm::vec3(x, y, z));
@@ -163,12 +161,31 @@ int OBJLoader::loadOBJFile(const char* path) {
   LOG_DEBUG("Loading %s OBJ file took %fms", path, elapsedTime);
 
   fclose(file);
-  return 0;
+
+  if (this->hasMTLLib()) {
+    std::string mtlLibPath = std::string(path);
+    const size_t lastSeparatorPos = mtlLibPath.find_last_of("/");
+    if (lastSeparatorPos == std::string::npos) {
+      mtlLibPath = this->mtlLibName;
+    } else {
+      mtlLibPath = mtlLibPath.substr(0, lastSeparatorPos + 1) + this->mtlLibName;
+    }
+    return this->loadMTLLib(mtlLibPath.c_str());
+  } else {
+    return 0;
+  }
 }
 
 inline float OBJLoader::parseFloat(const char** token) {
   (*token) += strspn(*token, " \t");
   float i = atof(*token);
+  (*token) += strcspn(*token, " \t");
+  return i;
+}
+
+inline int OBJLoader::parseInt(const char** token) {
+  (*token) += strspn(*token, " \t");
+  float i = atoi(*token);
   (*token) += strcspn(*token, " \t");
   return i;
 }
@@ -491,13 +508,171 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
   }
 }
 
-inline void OBJLoader::flushMeshData(MeshData** mesh, std::vector<MeshData*>& meshes) {
-  meshes.emplace_back(*mesh);
+inline void OBJLoader::flushMeshData(MeshData** mesh) {
+  this->meshes.emplace_back(*mesh);
   *mesh = new MeshData();
+}
+
+inline void OBJLoader::flushMaterialData(MaterialData** material) {
+  this->materials.emplace((*material)->mtlName, *material);
+  *material = new MaterialData();
 }
 
 OBJLoader::~OBJLoader() {
   for (size_t i = 0; i < this->meshes.size(); i++) {
     delete this->meshes[i];
   }
+}
+
+int OBJLoader::loadMTLLib(const char* path) {
+  FILE* file = fopen(path, "r");
+
+  if (file == NULL) {
+    this->error = "Could not open MTL file";
+    return -1;
+  }
+
+  LOG_DEBUG("Started loding %s MTL file", path);
+
+  auto t_start = std::chrono::high_resolution_clock::now();
+
+  MaterialData* currMaterial = new MaterialData();
+
+  char line[512];
+  unsigned int lineNum = 0;
+  while (fgets(line, 512, file) != NULL) {
+    ++lineNum;
+
+    const char* token = line;
+    token += strspn(token, " \t\n");
+
+    if (token[0] == '\0' || token[0] == '#') {
+      continue;
+    }
+
+    // Parse material name
+    if (strncmp(token, "newmtl", 6) == 0 && IS_SPACE(token[6])) {
+      token += 7;
+      token += strspn(token, " \t");
+
+      if (currMaterial->mtlName != "") {
+        this->flushMaterialData(&currMaterial);
+      }
+
+      currMaterial->mtlName = std::string(token);
+      currMaterial->mtlName.pop_back(); // Remove newline character
+
+      continue;
+    }
+
+    // Parse ambient color
+    if (token[0] == 'K' && token[1] == 'a' && IS_SPACE(token[2])) {
+      token += 2;
+
+      currMaterial->colorAmbientR = parseFloat(&token);
+      currMaterial->colorAmbientG = parseFloat(&token);
+      currMaterial->colorAmbientB = parseFloat(&token);
+
+      continue;
+    }
+
+    // Parse diffuse color
+    if (token[0] == 'K' && token[1] == 'd' && IS_SPACE(token[2])) {
+      token += 2;
+
+      currMaterial->colorDiffuseR = parseFloat(&token);
+      currMaterial->colorDiffuseG = parseFloat(&token);
+      currMaterial->colorDiffuseB = parseFloat(&token);
+
+      continue;
+    }
+
+    // Parse specular color
+    if (token[0] == 'K' && token[1] == 's' && IS_SPACE(token[2])) {
+      token += 2;
+
+      currMaterial->colorSpecularR = parseFloat(&token);
+      currMaterial->colorSpecularG = parseFloat(&token);
+      currMaterial->colorSpecularB = parseFloat(&token);
+
+      continue;
+    }
+
+    // Parse dissolve
+    if (token[0] == 'd' && IS_SPACE(token[1])) {
+      token += 1;
+
+      currMaterial->dissolve = parseFloat(&token);
+
+      continue;
+    }
+
+    // Parse dissolve (inverse)
+    if (token[0] == 'T' && token[1] == 'r' && IS_SPACE(token[2])) {
+      token += 2;
+
+      currMaterial->dissolve = 1 - parseFloat(&token);
+
+      continue;
+    }
+
+    // Parse dissolve (inverse)
+    if (token[0] == 'N' && token[1] == 'i' && IS_SPACE(token[2])) {
+      token += 2;
+
+      currMaterial->opticalDensity = parseFloat(&token);
+
+      continue;
+    }
+
+    // Parse illumination
+    if (strncmp(token, "illum", 5) == 0 && IS_SPACE(token[5])) {
+      token += 6;
+
+      currMaterial->illumination = parseInt(&token);
+
+      continue;
+    }
+
+    // Parse shininess
+    if (token[0] == 'N' && token[1] == 's' && IS_SPACE(token[2])) {
+      token += 2;
+
+      currMaterial->shininess = parseFloat(&token);
+
+      continue;
+    }
+
+    // Parse transmission filter
+    if (token[0] == 'T' && token[1] == 'f' && IS_SPACE(token[2])) {
+      token += 2;
+
+      currMaterial->transmissionFilterR = parseFloat(&token);
+      currMaterial->transmissionFilterG = parseFloat(&token);
+      currMaterial->transmissionFilterB = parseFloat(&token);
+
+      continue;
+    }
+
+    // Parse diffuse map name
+    if (strncmp(token, "map_Kd", 6) == 0 && IS_SPACE(token[6])) {
+      token += 7;
+      token += strspn(token, " \t");
+
+      currMaterial->colorDiffuseMapName = std::string(token);
+      currMaterial->colorDiffuseMapName.pop_back(); // Remove newline character
+
+      continue;
+    }
+  }
+
+  this->materials.emplace(currMaterial->mtlName, currMaterial);
+
+  auto t_end = std::chrono::high_resolution_clock::now();
+  double elapsedTime = std::chrono::duration<double, std::milli>(t_end - t_start).count();
+
+  LOG_DEBUG("Loading %s MTL file took %fms", path, elapsedTime);
+
+  fclose(file);
+  return 0;
 }
