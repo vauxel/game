@@ -11,6 +11,9 @@ int OBJLoader::loadOBJFile(const char* path) {
   auto t_start = std::chrono::high_resolution_clock::now();
 
   MeshData* currMesh = new MeshData();
+  this->numVerticesRead = 0;
+  this->numUVsRead = 0;
+  this->numNormalsRead = 0;
   std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash> vertexMap;
 
   size_t lineSize = 0;
@@ -33,7 +36,7 @@ int OBJLoader::loadOBJFile(const char* path) {
     }
 
     const char* token = line;
-    token += strspn(token, " \t");
+    token += strspn(token, " \t\n");
 
     if (token[0] == '\0' || token[0] == '#') {
       continue;
@@ -45,6 +48,7 @@ int OBJLoader::loadOBJFile(const char* path) {
       token += strspn(token, " \t");
 
       this->mtlLibName = std::string(token);
+      this->mtlLibName.pop_back(); // Remove newline character
 
       continue;
     }
@@ -55,6 +59,11 @@ int OBJLoader::loadOBJFile(const char* path) {
       token += strspn(token, " \t");
 
       currMesh->objName = std::string(token);
+      currMesh->objName.pop_back(); // Remove newline character
+
+      if (currMesh->rawVertices.size() > 0) {
+        this->flushMeshData(&currMesh, meshes);
+      }
 
       continue;
     }
@@ -65,6 +74,7 @@ int OBJLoader::loadOBJFile(const char* path) {
       token += strspn(token, " \t");
 
       currMesh->mtlName = std::string(token);
+      currMesh->mtlName.pop_back(); // Remove newline character
 
       continue;
     }
@@ -76,6 +86,10 @@ int OBJLoader::loadOBJFile(const char* path) {
       float x = parseFloat(&token);
       float y = parseFloat(&token);
       float z = parseFloat(&token);
+
+      if (currMesh->vertices.size() > 0) {
+        this->flushMeshData(&currMesh, meshes);
+      }
 
       currMesh->rawVertices.emplace_back(glm::vec3(x, y, z));
 
@@ -119,18 +133,15 @@ int OBJLoader::loadOBJFile(const char* path) {
 
         if (this->parseFaceTriple(&token, vIdx, uvIdx, normIdx)) {
           if (vIdx <= 0 || uvIdx <= 0 || normIdx <= 0) {
-            LOG_WARNING("Unable to parse face in OBJ file \"%s\" with negative index(es) on line %u", path, lineNum);
-            break;
+            this->error = "Unable to parse face with negative index(es)";
+            free(line);
+            fclose(file);
+            return -1;
           }
 
           faceTriples.push_back({ vIdx, uvIdx, normIdx });
-          token += strspn(token, " \t");
+          token += strspn(token, " \t\n");
         }
-      }
-
-      // This means that all of the face triples were not successfully parsed
-      if (token[0] != '\0') {
-        continue;
       }
 
       const size_t numFaceTriples = faceTriples.size();
@@ -177,10 +188,6 @@ inline float OBJLoader::parseFloat(const char** token) {
 }
 
 bool OBJLoader::parseFaceTriple(const char** token, int& vIdx, int& uvIdx, int& normIdx) {
-  if (IS_SPACE((*token)[0])) {
-    return false;
-  }
-
   vIdx = atoi(*token);
   (*token) += strcspn(*token, "/ \t");
 
@@ -217,9 +224,9 @@ unsigned int OBJLoader::resolveVertex(MeshData* mesh, std::unordered_map<FaceTri
     return search->second;
   } else {
     Vertex newVertex = Vertex(
-      mesh->rawVertices[originalIndices.vertIndex - 1],
-      originalIndices.uvIndex != 0 ? mesh->rawUVs[originalIndices.uvIndex - 1] : glm::vec3(0, 0, 0),
-      originalIndices.normIndex != 0 ? mesh->rawNormals[originalIndices.normIndex - 1] : glm::vec3(0, 0, 0)
+      mesh->rawVertices[originalIndices.vertIndex - this->numVerticesRead - 1],
+      originalIndices.uvIndex != 0 ? mesh->rawUVs[originalIndices.uvIndex - this->numUVsRead - 1] : glm::vec3(0, 0, 0),
+      originalIndices.normIndex != 0 ? mesh->rawNormals[originalIndices.normIndex - this->numNormalsRead - 1] : glm::vec3(0, 0, 0)
     );
 
     mesh->vertices.emplace_back(newVertex);
@@ -233,7 +240,7 @@ void OBJLoader::triangulateFace(MeshData* mesh, std::vector<FaceTripleData>& fac
   std::vector<glm::vec3> polyPoints;
 
   for (size_t i = 0; i < faceTriples.size(); i++) {
-    polyPoints.emplace_back(mesh->rawVertices[faceTriples[i].vertIndex - 1]);
+    polyPoints.emplace_back(mesh->rawVertices[faceTriples[i].vertIndex - this->numVerticesRead - 1]);
   }
 
   const glm::vec3 normal = this->calcPolyNormal(polyPoints);
@@ -498,7 +505,13 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
   }
 }
 
-void OBJLoader::flushMeshData(MeshData** mesh, std::vector<MeshData*>& meshes) {
+inline void OBJLoader::flushMeshData(MeshData** mesh, std::vector<MeshData*>& meshes) {
+  this->numVerticesRead += (*mesh)->rawVertices.size();
+  this->numUVsRead += (*mesh)->rawUVs.size();
+  this->numVerticesRead += (*mesh)->rawNormals.size();
+
+  // Maybe need to persist raw vertices/uvs/norms between meshes since OBJ faces can reference prev vertices
+
   meshes.emplace_back(*mesh);
   *mesh = new MeshData();
 }

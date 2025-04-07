@@ -61,6 +61,9 @@ class OBJLoader {
 
     std::string mtlLibName = "";
     std::vector<MeshData*> meshes;
+    unsigned int numVerticesRead = 0;
+    unsigned int numUVsRead = 0;
+    unsigned int numNormalsRead = 0;
 
     float parseFloat(const char** token);
     bool parseFaceTriple(const char** token, int& vIdx, int& uvIdx, int& normIdx);
