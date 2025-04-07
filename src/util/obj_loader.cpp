@@ -10,7 +10,7 @@ int OBJLoader::loadOBJFile(const char* path) {
 
   MeshData* currMesh = new MeshData();
 
-  std::unordered_map<FaceTripleData, unsigned long, FaceTripleDataHash> vertexMap;
+  std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash> vertexMap;
 
   size_t lineNum = 0;
   while (fileStream.peek() != -1) {
@@ -108,7 +108,7 @@ int OBJLoader::loadOBJFile(const char* path) {
       std::vector<FaceTripleData> faceTriples;
 
       while (token[0] != '\0') {
-        long vIdx = 0, uvIdx = 0, normIdx = 0;
+        int vIdx = 0, uvIdx = 0, normIdx = 0;
 
         if (this->parseFaceTriple(&token, vIdx, uvIdx, normIdx)) {
           faceTriples.push_back({ vIdx, uvIdx, normIdx });
@@ -133,7 +133,7 @@ int OBJLoader::loadOBJFile(const char* path) {
       }
 
       for (size_t ti = 0; ti < faceTriples.size(); ti++) {
-        unsigned long vertexIndex = this->resolveVertex(currMesh, vertexMap, faceTriples[ti]);
+        unsigned int vertexIndex = this->resolveVertex(currMesh, vertexMap, faceTriples[ti]);
         currMesh->indices.emplace_back(vertexIndex);
       }
 
@@ -154,12 +154,12 @@ inline float OBJLoader::parseFloat(const char** token) {
   return i;
 }
 
-bool OBJLoader::parseFaceTriple(const char** token, long& vIdx, long& uvIdx, long& normIdx) {
+bool OBJLoader::parseFaceTriple(const char** token, int& vIdx, int& uvIdx, int& normIdx) {
   if (IS_SPACE((*token)[0])) {
     return false;
   }
 
-  vIdx = atol(*token);
+  vIdx = atoi(*token);
   (*token) += strcspn(*token, "/ \t");
 
   // i
@@ -172,17 +172,17 @@ bool OBJLoader::parseFaceTriple(const char** token, long& vIdx, long& uvIdx, lon
   // i//k
   if ((*token)[0] == '/') {
     (*token)++;
-    normIdx = atol(*token);
+    normIdx = atoi(*token);
     (*token) += strcspn(*token, "/ \t");
   } else {
     // i/j
-    uvIdx = atol(*token);
+    uvIdx = atoi(*token);
     (*token) += strcspn(*token, "/ \t");
     
     // i/j/k
     if ((*token)[0] == '/') {
       (*token)++;
-      normIdx = atol(*token);
+      normIdx = atoi(*token);
       (*token) += strcspn(*token, " \t");
     }
   }
@@ -190,7 +190,7 @@ bool OBJLoader::parseFaceTriple(const char** token, long& vIdx, long& uvIdx, lon
   return true;
 }
 
-unsigned long OBJLoader::resolveVertex(MeshData* mesh, std::unordered_map<FaceTripleData, unsigned long, FaceTripleDataHash>& vertexMap, FaceTripleData& originalIndices) {
+unsigned int OBJLoader::resolveVertex(MeshData* mesh, std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash>& vertexMap, FaceTripleData& originalIndices) {
   if (auto search = vertexMap.find(originalIndices); search != vertexMap.end()) {
     return search->second;
   } else {
@@ -201,7 +201,7 @@ unsigned long OBJLoader::resolveVertex(MeshData* mesh, std::unordered_map<FaceTr
     );
 
     mesh->vertices.emplace_back(newVertex);
-    unsigned long vertexIndex = mesh->vertices.size() - 1;
+    unsigned int vertexIndex = static_cast<unsigned int>(mesh->vertices.size()) - 1;
     vertexMap.emplace(originalIndices, vertexIndex);
     return vertexIndex;
   }
@@ -316,7 +316,7 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
   }
 
   while (!polyPoints.empty()) {
-    long earIndex = -1;
+    int earIndex = -1;
 
     // Get biggest ear
     {
@@ -341,9 +341,9 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
             } else if (n == 3) {
               isEar = true;
             } else {
-              const long prevIndex = (i - 1 + n) % n;
-              const long currIndex = i % n;
-              const long nextIndex = (i + 1) % n;
+              const int prevIndex = (i - 1 + n) % n;
+              const int currIndex = i % n;
+              const int nextIndex = (i + 1) % n;
 
               const glm::vec3& prev = polyPoints[prevIndex];
               const glm::vec3& curr = polyPoints[currIndex];
@@ -445,9 +445,9 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
 
     const size_t n = faceTriples.size();
 
-    const long prevIndex = (earIndex - 1 + n) % n;
-    const long currIndex = earIndex % n;
-    const long nextIndex = (earIndex + 1) % n;
+    const int prevIndex = (earIndex - 1 + n) % n;
+    const int currIndex = earIndex % n;
+    const int nextIndex = (earIndex + 1) % n;
 
     // const glm::vec3& prevPoint = polyPoints[prevIndex];
     // const glm::vec3& currPoint = polyPoints[currIndex];

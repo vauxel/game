@@ -30,15 +30,15 @@ class OBJLoader {
       std::vector<glm::vec2> rawUVs;
       std::vector<glm::vec3> rawNormals;
       std::vector<Vertex> vertices;
-      std::vector<unsigned long> indices;
+      std::vector<unsigned int> indices;
       std::string objName = "";
       std::string mtlName = "";
     };
 
     struct FaceTripleData {
-      long vertIndex;
-      long uvIndex;
-      long normIndex;
+      int vertIndex;
+      int uvIndex;
+      int normIndex;
 
       bool operator==(const FaceTripleData& other) const {
         return vertIndex == other.vertIndex && uvIndex == other.uvIndex && normIndex == other.normIndex;
@@ -48,9 +48,9 @@ class OBJLoader {
     struct FaceTripleDataHash {
       size_t operator()(const FaceTripleData& x) const {
         size_t res = 17;
-        res = res * 31 + std::hash<long>()(x.vertIndex);
-        res = res * 31 + std::hash<long>()(x.uvIndex);
-        res = res * 31 + std::hash<long>()(x.normIndex);
+        res = res * 31 + std::hash<int>()(x.vertIndex);
+        res = res * 31 + std::hash<int>()(x.uvIndex);
+        res = res * 31 + std::hash<int>()(x.normIndex);
         return res;
       }
     };
@@ -61,8 +61,8 @@ class OBJLoader {
     std::vector<MeshData*> meshes;
 
     float parseFloat(const char** token);
-    bool parseFaceTriple(const char** token, long& vIdx, long& uvIdx, long& normIdx);
-    unsigned long resolveVertex(MeshData* mesh, std::unordered_map<FaceTripleData, unsigned long, FaceTripleDataHash>& vertexMap, FaceTripleData& originalIndices);
+    bool parseFaceTriple(const char** token, int& vIdx, int& uvIdx, int& normIdx);
+    unsigned int resolveVertex(MeshData* mesh, std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash>& vertexMap, FaceTripleData& originalIndices);
     void triangulateFace(MeshData* mesh, std::vector<FaceTripleData>& faceTriples);
     void triangulateFaceFan(std::vector<FaceTripleData>& faceTriples);
     void triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, std::vector<glm::vec3>& polyPoints, const glm::vec3& normalPoint);

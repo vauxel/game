@@ -20,7 +20,7 @@ class Model : public Resource {
 			Mesh();
 			~Mesh();
 
-			void init(const std::vector<Vertex>& vertices, const std::vector<unsigned long>& indices);
+			void init(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 
 			unsigned int vao, vbo, ebo;
 			unsigned long indicesCount;
