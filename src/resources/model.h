@@ -23,11 +23,11 @@ class Model : public Resource {
 			void init(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 
 			unsigned int vao, vbo, ebo;
-			unsigned long indicesCount;
+			unsigned int indicesCount;
 		};
 
 		Mesh* meshes;
-		unsigned long numMeshes = 0;
+		unsigned int numMeshes = 0;
 	private:
 		int init(OBJLoader& objReader);
 };

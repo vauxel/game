@@ -12,7 +12,7 @@ int OBJLoader::loadOBJFile(const char* path) {
 
   std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash> vertexMap;
 
-  unsigned long lineNum = 0;
+  unsigned int lineNum = 0;
   while (fileStream.peek() != -1) {
     lineNum++;
 
@@ -116,10 +116,10 @@ int OBJLoader::loadOBJFile(const char* path) {
         }
       }
 
-      const unsigned long numFaceTriples = faceTriples.size();
+      const size_t numFaceTriples = faceTriples.size();
 
       if (numFaceTriples < 3) {
-        LOG_WARNING("Degenerated face found in OBJ file \"%s\" on line %lu", path, lineNum);
+        LOG_WARNING("Degenerated face found in OBJ file \"%s\" on line %u", path, lineNum);
         continue;
       }
 
@@ -127,7 +127,7 @@ int OBJLoader::loadOBJFile(const char* path) {
         this->triangulateFace(currMesh, faceTriples);
 
         if (faceTriples.size() % 3 != 0) {
-          LOG_WARNING("Failed to triangulate %lu-gon face in OBJ file \"%s\" on line %lu", numFaceTriples, path, lineNum);
+          LOG_WARNING("Failed to triangulate %lu-gon face in OBJ file \"%s\" on line %u", numFaceTriples, path, lineNum);
           continue;
         }
       }
@@ -210,7 +210,7 @@ unsigned int OBJLoader::resolveVertex(MeshData* mesh, std::unordered_map<FaceTri
 void OBJLoader::triangulateFace(MeshData* mesh, std::vector<FaceTripleData>& faceTriples) {
   std::vector<glm::vec3> polyPoints;
 
-  for (unsigned long i = 0; i < faceTriples.size(); i++) {
+  for (size_t i = 0; i < faceTriples.size(); i++) {
     polyPoints.emplace_back(mesh->rawVertices[faceTriples[i].vertIndex - 1]);
   }
 
@@ -225,9 +225,9 @@ void OBJLoader::triangulateFace(MeshData* mesh, std::vector<FaceTripleData>& fac
 
 inline glm::vec3 OBJLoader::calcPolyNormal(const std::vector<glm::vec3>& points) {
   glm::vec3 normal(0.0, 0.0, 0.0);
-  const unsigned long n = points.size();
+  const size_t n = points.size();
 
-  for (unsigned long i = 0; i < n; i++) {
+  for (size_t i = 0; i < n; i++) {
     const glm::vec3& curr = points[i % n];
     const glm::vec3& next = points[(i + 1) % n];
 
@@ -252,10 +252,10 @@ inline OBJLoader::TurnDirection OBJLoader::calcPolyTurnDir(const glm::vec3& prev
 }
 
 bool OBJLoader::isConvexPoly(const std::vector<glm::vec3>& points, const glm::vec3& normal) {
-  const unsigned long n = points.size();
+  const size_t n = points.size();
   TurnDirection polyTurnDir = TurnDirection::NoTurn;
 
-  for (unsigned long i = 0; i < n; i++) {
+  for (size_t i = 0; i < n; i++) {
     const glm::vec3& prev = points[(i - 1 + n) % n];
     const glm::vec3& curr = points[i % n];
     const glm::vec3& next = points[(i + 1) % n];
@@ -281,7 +281,7 @@ bool OBJLoader::isConvexPoly(const std::vector<glm::vec3>& points, const glm::ve
 void OBJLoader::triangulateFaceFan(std::vector<FaceTripleData>& faceTriples) {
   std::vector<FaceTripleData> newFaceTriples;
 
-  for (unsigned long i = 1; i < faceTriples.size() - 1; i++) {
+  for (size_t i = 1; i < faceTriples.size() - 1; i++) {
     newFaceTriples.emplace_back(faceTriples[0]);
     newFaceTriples.emplace_back(faceTriples[i]);
     newFaceTriples.emplace_back(faceTriples[i + 1]);
@@ -295,10 +295,10 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
 
   // Calculate and align clockwise-ness
   {
-    const unsigned long n = polyPoints.size();
+    const size_t n = polyPoints.size();
     double orientationSum = 0.0;
 
-    for (unsigned long i = 0; i < n; i++) {
+    for (size_t i = 0; i < n; i++) {
       const glm::vec3& prev = polyPoints[(i - 1 + n) % n];
       const glm::vec3& curr = polyPoints[i % n];
       const glm::vec3& next = polyPoints[(i + 1) % n];
@@ -320,7 +320,7 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
 
     // Get biggest ear
     {
-      const unsigned long n = polyPoints.size();
+      const size_t n = polyPoints.size();
       
       if (n == 3) {
         earIndex = 0;
@@ -329,12 +329,12 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
       } else {
         double maxArea = DBL_MIN;
 
-        for (unsigned long i = 0; i < n; i++) {
+        for (size_t i = 0; i < n; i++) {
           bool isEar = true;
 
           // Detect if ear
           {
-            const unsigned long n = polyPoints.size();
+            const size_t n = polyPoints.size();
 
             if (n < 3) {
               isEar = false;
@@ -352,7 +352,7 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
               if (this->calcPolyTurnDir(prev, curr, next, normalPoint) != TurnDirection::Right) {
                 isEar = false;
               } else {
-                for (unsigned long j = 0; j < polyPoints.size(); j++) {
+                for (size_t j = 0; j < polyPoints.size(); j++) {
                   if (j == prevIndex || j == currIndex || j == nextIndex) {
                     continue;
                   }
@@ -414,14 +414,14 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
 
     // Fallback to getting overlapping ear
     if (earIndex == -1) {
-      const unsigned long n = polyPoints.size();
+      const size_t n = polyPoints.size();
 
       if (n == 3) {
         earIndex = 0;
       } else if (n == 0) {
         earIndex = -1;
       } else {
-        for (unsigned long i = 0; i < n; i++) {
+        for (size_t i = 0; i < n; i++) {
           const glm::vec3& prev = polyPoints[(i - 1 + n) % n];
           const glm::vec3& curr = polyPoints[i % n];
           const glm::vec3& next = polyPoints[(i + 1) % n];
@@ -443,7 +443,7 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
       return;
     }
 
-    const unsigned long n = faceTriples.size();
+    const size_t n = faceTriples.size();
 
     const int prevIndex = (earIndex - 1 + n) % n;
     const int currIndex = earIndex % n;
@@ -482,7 +482,7 @@ void OBJLoader::flushMeshData(MeshData** mesh, std::vector<MeshData*>& meshes) {
 }
 
 OBJLoader::~OBJLoader() {
-  for (unsigned long i = 0; i < this->meshes.size(); i++) {
+  for (size_t i = 0; i < this->meshes.size(); i++) {
     delete this->meshes[i];
   }
 }

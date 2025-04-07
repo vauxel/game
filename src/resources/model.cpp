@@ -28,7 +28,7 @@ int Model::init(OBJLoader& objLoader) {
 	this->meshes = new Model::Mesh[meshData.size()];
 	this->numMeshes = meshData.size();
 
-	for (unsigned long i = 0; i < numMeshes; i++) {
+	for (size_t i = 0; i < numMeshes; i++) {
 		this->meshes[i].init(meshData[i]->vertices, meshData[i]->indices);
 	}
 
