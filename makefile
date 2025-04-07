@@ -1,6 +1,6 @@
 ifeq ($(OS),Windows_NT)
-CXX						:= g++
-CXXFLAGS			:= -std=c++20 -g -Wall -Wl,-rpath=lib/windows
+CXX						:= clang++
+CXXFLAGS			:= -std=c++20 -g -Wall
 LDFLAGS				:= -Llib/windows -lopengl32 -lglfw3 -lglew32
 else
 CXX						:= clang++

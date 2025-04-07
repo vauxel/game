@@ -1,12 +1,10 @@
 #include "shader.h"
 
 int Shader::load() {
-	char vertShaderPath[strlen(resourcePath) + 5];
-	char fragShaderPath[strlen(resourcePath) + 5];
-	strcpy(vertShaderPath, resourcePath);
-	strcpy(fragShaderPath, resourcePath);
-	strcat(vertShaderPath, ".vert");
-	strcat(fragShaderPath, ".frag");
+	std::string vertShaderPath = std::string(this->resourcePath);
+	vertShaderPath.append(".vert");
+	std::string fragShaderPath = std::string(this->resourcePath);
+	fragShaderPath.append(".frag");
 
 	std::ifstream vertShaderFile(vertShaderPath), fragShaderFile(fragShaderPath);
 
@@ -72,7 +70,7 @@ int Shader::load() {
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
 
-	LOG_DEBUG("Shader loaded: %s, %s", vertShaderPath, fragShaderPath);
+	LOG_DEBUG("Shader loaded: %s, %s", vertShaderPath.c_str(), fragShaderPath.c_str());
 	return 0;
 }
 

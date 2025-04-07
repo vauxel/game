@@ -27,7 +27,7 @@ class Model : public Resource {
 		};
 
 		Mesh* meshes;
-		size_t numMeshes = 0;
+		unsigned long numMeshes = 0;
 	private:
 		int init(OBJLoader& objReader);
 };

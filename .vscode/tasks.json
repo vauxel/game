@@ -4,7 +4,7 @@
           "type": "shell",
           "label": "Run Makefile (Windows)",
           "command": "msys2_shell.cmd",
-          "args": ["-defterm", "-mingw64", "-no-start", "-here", "-c", "make"],
+          "args": ["-defterm", "-clang64", "-no-start", "-here", "-c", "make"],
           "problemMatcher": [],
           "options": {
             "cwd": "${workspaceFolder}",
