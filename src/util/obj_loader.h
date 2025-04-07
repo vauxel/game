@@ -27,9 +27,6 @@ class OBJLoader {
     };
 
     struct MeshData {
-      std::vector<glm::vec3> rawVertices;
-      std::vector<glm::vec2> rawUVs;
-      std::vector<glm::vec3> rawNormals;
       std::vector<Vertex> vertices;
       std::vector<unsigned int> indices;
       std::string objName = "";
@@ -60,9 +57,9 @@ class OBJLoader {
 
     std::string mtlLibName = "";
     std::vector<MeshData*> meshes;
-    unsigned int numVerticesRead = 0;
-    unsigned int numUVsRead = 0;
-    unsigned int numNormalsRead = 0;
+    std::vector<glm::vec3> rawVertices;
+    std::vector<glm::vec2> rawUVs;
+    std::vector<glm::vec3> rawNormals;
 
     float parseFloat(const char** token);
     bool parseFaceTriple(const char** token, int& vIdx, int& uvIdx, int& normIdx);
