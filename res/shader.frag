@@ -6,7 +6,7 @@ struct Material {
 	vec3 diffuse;
 	vec3 specular;
 	float shininess;
-}
+};
 
 in vec3 fragPosition;
 in vec2 fragUV;
