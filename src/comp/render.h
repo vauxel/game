@@ -5,11 +5,12 @@
 #include "entity.h"
 #include "resources/model.h"
 #include "resources/texture.h"
+#include "resources/shader.h"
 
 struct Render : public Component {
 	Model* model;
 	Texture* texture;
 
 	Render(std::string modelName, std::string texName);
-	void render();
+	void render(Shader* shader);
 };

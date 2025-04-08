@@ -29,6 +29,7 @@ class Model : public Resource {
 
 			unsigned int vao, vbo, ebo;
 			unsigned int indicesCount;
+			MaterialData material;
 		};
 
 		Mesh* meshes;

@@ -1,6 +1,13 @@
 #version 410
 #define MAX_LIGHTS 10
 
+struct Material {
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	float shininess;
+}
+
 in vec3 fragPosition;
 in vec2 fragUV;
 in vec3 fragNormal;
@@ -8,10 +15,14 @@ in vec3 fragNormal;
 out vec4 fragColor;
 
 uniform sampler2D textureSampler;
+
 uniform mat4 camera;
 uniform mat4 model;
 uniform mat3 modelNormal;
 uniform vec3 cameraPosition;
+
+uniform Material material;
+
 uniform int numLights;
 uniform struct Light {
 	int type;
