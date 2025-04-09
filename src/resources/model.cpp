@@ -1,77 +1,108 @@
 #include "model.h"
 
 int Model::load() {
-	OBJLoader loader;
+  int ret = -1;
 
-	if (loader.loadOBJFile(resourcePath)) {
-		LOG_ERROR("Failed to initialize model: %s (%s)", resourcePath, loader.getError());
-		return -1;
-	}
+  if (this->loadingMethod == LoadingMethod::OBJ) {
+    OBJLoader loader;
 
-	int ret = this->init(loader);
+    if (loader.loadOBJFile(resourcePath)) {
+      LOG_ERROR("Failed to initialize model: %s (%s)", resourcePath, loader.getError());
+      return -1;
+    }
 
-	if (ret == 0) {
-		LOG_DEBUG("Model loaded: %s", resourcePath);
-	}
+    ret = this->initFromOBJ(loader);
+  }
 
-	return ret;
+  if (ret == 0) {
+    LOG_DEBUG("Model loaded: %s", resourcePath);
+  }
+
+  return ret;
 }
 
 void Model::unload() {
-	delete[] this->meshes;
-	this->meshes = nullptr;
-	LOG_DEBUG("Model unloaded: %s", resourcePath);
+  delete[] this->meshes;
+  this->meshes = nullptr;
+
+  for (size_t i = 0; i < this->numMaterials; i++) {
+    delete this->materials[i];
+  }
+
+  delete[] this->materials;
+  this->materials = nullptr;
+
+  LOG_DEBUG("Model unloaded: %s", resourcePath);
 }
 
-int Model::init(OBJLoader& objLoader) {
-	auto meshData = objLoader.getMeshes();
-	this->meshes = new Model::Mesh[meshData.size()];
-	this->numMeshes = meshData.size();
+int Model::initFromOBJ(OBJLoader& objLoader) {
+  auto loadedMeshes = objLoader.getMeshes();
+  this->numMeshes = loadedMeshes.size();
+  this->meshes = new Model::Mesh[this->numMeshes];
 
-	for (size_t i = 0; i < numMeshes; i++) {
-		this->meshes[i].init(meshData[i]->vertices, meshData[i]->indices);
-	}
+  auto loadedMaterials = objLoader.getMaterials();
+  this->numMaterials = loadedMaterials.size();
+  this->materials = new MaterialData*[this->numMaterials];
 
-	return 0;
+  for (size_t i = 0; i < numMeshes; i++) {
+    MeshData* newMeshData = new MeshData{
+      .vertices = std::move(loadedMeshes[i]->vertices),
+      .indices = std::move(loadedMeshes[i]->indices)
+    };
+    this->meshes[i].init(newMeshData, loadedMeshes[i]->materialData);
+  }
+
+  unsigned int meshIndex = 0;
+  for (auto& [key, value] : loadedMaterials) {
+    this->materials[meshIndex] = value;
+    ++meshIndex;
+  }
+
+  return 0;
 }
 
-void Model::Mesh::init(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
-	indicesCount = indices.size();
+void Model::Mesh::init(MeshData* meshData, MaterialData* matData) {
+  this->meshData = meshData;
+  this->materialData = matData;
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+  indicesCount = meshData->indices.size();
 
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(
-		GL_ARRAY_BUFFER,
-		sizeof(Vertex) * vertices.size(),
-		&vertices.front(),
-		GL_STATIC_DRAW
-	);
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
 
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(
-		GL_ELEMENT_ARRAY_BUFFER,
-		sizeof(unsigned int) * indices.size(),
-		&indices.front(),
-		GL_STATIC_DRAW
-	);
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(
+    GL_ARRAY_BUFFER,
+    sizeof(Vertex) * meshData->vertices.size(),
+    &meshData->vertices.front(),
+    GL_STATIC_DRAW
+  );
+
+  glGenBuffers(1, &ebo);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+  glBufferData(
+    GL_ELEMENT_ARRAY_BUFFER,
+    sizeof(unsigned int) * meshData->indices.size(),
+    &meshData->indices.front(),
+    GL_STATIC_DRAW
+  );
 }
 
 Model::Mesh::Mesh() {
-	vbo = GL_INVALID_VALUE;
-	ebo = GL_INVALID_VALUE;
-	indicesCount = 0;
+  vbo = GL_INVALID_VALUE;
+  ebo = GL_INVALID_VALUE;
+  indicesCount = 0;
 }
 
 Model::Mesh::~Mesh() {
-	if (vbo != GL_INVALID_VALUE) {
-		glDeleteBuffers(1, &vbo);
-	}
+  if (vbo != GL_INVALID_VALUE) {
+    glDeleteBuffers(1, &vbo);
+  }
 
-	if (ebo != GL_INVALID_VALUE) {
-		glDeleteBuffers(1, &ebo);
-	}
+  if (ebo != GL_INVALID_VALUE) {
+    glDeleteBuffers(1, &ebo);
+  }
+
+  delete this->meshData;
 }

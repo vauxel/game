@@ -41,15 +41,15 @@ void Game::init() {
   glfwSetCursorPosCallback(window, handleCursor);
 
   resourceManager->loadResource(new Texture(), "checker", "res/textures/checker.png");
-  // resourceManager->loadResource(new Model(), "plane", "res/plane.obj");
+  // resourceManager->loadResource(new Model(Model::LoadingMethod::OBJ), "plane", "res/plane.obj");
   // resourceManager->loadResource(new Texture(), "cube_texture", "res/textures/cube_texture.png");
-  // resourceManager->loadResource(new Model(), "cube", "res/cube_textured.obj");
-  // resourceManager->loadResource(new Model(), "erato", "res/erato.obj");
-  // resourceManager->loadResource(new Model(), "bike", "res/road_bike.obj");
-  // resourceManager->loadResource(new Model(), "sponza", "res/sponza.obj");
-  // resourceManager->loadResource(new Model(), "cube", "res/cube.obj");
-  // resourceManager->loadResource(new Model(), "random", "res/random.obj");
-  resourceManager->loadResource(new Model(), "salle_de_bain", "res/salle_de_bain.obj");
+  // resourceManager->loadResource(new Model(Model::LoadingMethod::OBJ), "cube", "res/cube_textured.obj");
+  // resourceManager->loadResource(new Model(Model::LoadingMethod::OBJ), "erato", "res/erato.obj");
+  // resourceManager->loadResource(new Model(Model::LoadingMethod::OBJ), "bike", "res/road_bike.obj");
+  // resourceManager->loadResource(new Model(Model::LoadingMethod::OBJ), "sponza", "res/sponza.obj");
+  // resourceManager->loadResource(new Model(Model::LoadingMethod::OBJ), "cube", "res/cube.obj");
+  // resourceManager->loadResource(new Model(Model::LoadingMethod::OBJ), "random", "res/random.obj");
+  resourceManager->loadResource(new Model(Model::LoadingMethod::OBJ), "salle_de_bain", "res/salle_de_bain.obj");
 
   // Entity* plane = new Entity();
   // plane->assign<Spatial>(glm::vec3(0.0f, 0.0f, 0.0f));

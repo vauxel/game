@@ -8,11 +8,11 @@ int OBJLoader::loadOBJFile(const char* path) {
     return -1;
   }
 
-  LOG_DEBUG("Started loding %s OBJ file", path);
+  LOG_DEBUG("Started loading %s OBJ file", path);
 
   auto t_start = std::chrono::high_resolution_clock::now();
 
-  MeshData* currMesh = new MeshData();
+  OBJLoader::MeshData* currMesh = new OBJLoader::MeshData();
   std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash> vertexMap;
 
   char line[512];
@@ -170,7 +170,13 @@ int OBJLoader::loadOBJFile(const char* path) {
     } else {
       mtlLibPath = mtlLibPath.substr(0, lastSeparatorPos + 1) + this->mtlLibName;
     }
-    return this->loadMTLLib(mtlLibPath.c_str());
+
+    if (this->loadMTLLib(mtlLibPath.c_str())) {
+      return -1;
+    } else {
+      this->linkMeshMaterials();
+      return 0;
+    }
   } else {
     return 0;
   }
@@ -222,7 +228,7 @@ bool OBJLoader::parseFaceTriple(const char** token, int& vIdx, int& uvIdx, int& 
   return true;
 }
 
-unsigned int OBJLoader::resolveVertex(MeshData* mesh, std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash>& vertexMap, FaceTripleData& originalIndices) {
+unsigned int OBJLoader::resolveVertex(OBJLoader::MeshData* mesh, std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash>& vertexMap, FaceTripleData& originalIndices) {
   if (auto search = vertexMap.find(originalIndices); search != vertexMap.end()) {
     return search->second;
   } else {
@@ -239,7 +245,7 @@ unsigned int OBJLoader::resolveVertex(MeshData* mesh, std::unordered_map<FaceTri
   }
 }
 
-void OBJLoader::triangulateFace(MeshData* mesh, std::vector<FaceTripleData>& faceTriples) {
+void OBJLoader::triangulateFace(OBJLoader::MeshData* mesh, std::vector<FaceTripleData>& faceTriples) {
   std::vector<glm::vec3> polyPoints;
 
   for (size_t i = 0; i < faceTriples.size(); i++) {
@@ -508,9 +514,9 @@ void OBJLoader::triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, 
   }
 }
 
-inline void OBJLoader::flushMeshData(MeshData** mesh) {
+inline void OBJLoader::flushMeshData(OBJLoader::MeshData** mesh) {
   this->meshes.emplace_back(*mesh);
-  *mesh = new MeshData();
+  *mesh = new OBJLoader::MeshData();
 }
 
 inline void OBJLoader::flushMaterialData(MaterialData** material) {
@@ -522,6 +528,10 @@ OBJLoader::~OBJLoader() {
   for (size_t i = 0; i < this->meshes.size(); i++) {
     delete this->meshes[i];
   }
+
+  // NOTE: Caller of OBJLoader is responsible for destructing the materials
+
+  std::cout << "OBJLoader destructed" << std::endl;
 }
 
 int OBJLoader::loadMTLLib(const char* path) {
@@ -532,17 +542,14 @@ int OBJLoader::loadMTLLib(const char* path) {
     return -1;
   }
 
-  LOG_DEBUG("Started loding %s MTL file", path);
+  LOG_DEBUG("Started loading %s MTL file", path);
 
   auto t_start = std::chrono::high_resolution_clock::now();
 
   MaterialData* currMaterial = new MaterialData();
 
   char line[512];
-  unsigned int lineNum = 0;
   while (fgets(line, 512, file) != NULL) {
-    ++lineNum;
-
     const char* token = line;
     token += strspn(token, " \t\n");
 
@@ -675,4 +682,22 @@ int OBJLoader::loadMTLLib(const char* path) {
 
   fclose(file);
   return 0;
+}
+
+void OBJLoader::linkMeshMaterials() {
+  for (size_t i = 0; i < this->meshes.size(); i++) {
+    OBJLoader::MeshData* mesh = this->meshes[i];
+
+    if (mesh->mtlName == "") {
+      continue;
+    }
+
+    auto materialLookup = this->materials.find(mesh->mtlName);
+
+    if (materialLookup == this->materials.end()) {
+      continue;
+    }
+
+    mesh->materialData = materialLookup->second;
+  }
 }

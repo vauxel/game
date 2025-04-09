@@ -32,6 +32,7 @@ class OBJLoader {
       std::vector<unsigned int> indices;
       std::string objName = "";
       std::string mtlName = "";
+      MaterialData* materialData = nullptr;
     };
 
     struct FaceTripleData {
@@ -58,7 +59,7 @@ class OBJLoader {
 
     std::string mtlLibName = "";
 
-    std::vector<MeshData*> meshes;
+    std::vector<OBJLoader::MeshData*> meshes;
     std::unordered_map<std::string, MaterialData*> materials;
 
     std::vector<glm::vec3> rawVertices;
@@ -68,21 +69,23 @@ class OBJLoader {
     float parseFloat(const char** token);
     int parseInt(const char** token);
     bool parseFaceTriple(const char** token, int& vIdx, int& uvIdx, int& normIdx);
-    unsigned int resolveVertex(MeshData* mesh, std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash>& vertexMap, FaceTripleData& originalIndices);
-    void triangulateFace(MeshData* mesh, std::vector<FaceTripleData>& faceTriples);
+    unsigned int resolveVertex(OBJLoader::MeshData* mesh, std::unordered_map<FaceTripleData, unsigned int, FaceTripleDataHash>& vertexMap, FaceTripleData& originalIndices);
+    void triangulateFace(OBJLoader::MeshData* mesh, std::vector<FaceTripleData>& faceTriples);
     void triangulateFaceFan(std::vector<FaceTripleData>& faceTriples);
     void triangulateFaceEarcut(std::vector<FaceTripleData>& faceTriples, std::vector<glm::vec3>& polyPoints, const glm::vec3& normalPoint);
     bool isConvexPoly(const std::vector<glm::vec3>& points, const glm::vec3& normal);
     glm::vec3 calcPolyNormal(const std::vector<glm::vec3>& points);
     OBJLoader::TurnDirection calcPolyTurnDir(const glm::vec3& prev, const glm::vec3& curr, const glm::vec3& next, const glm::vec3& normal);
-    void flushMeshData(MeshData** mesh);
+    void flushMeshData(OBJLoader::MeshData** mesh);
     void flushMaterialData(MaterialData** material);
+    void linkMeshMaterials();
   public:
     int loadOBJFile(const char* path);
     int loadMTLLib(const char* path);
     bool hasMTLLib() { return this->mtlLibName != ""; };
     const char* getError() { return this->error; };
-    const std::vector<MeshData*>& getMeshes() { return this->meshes; };
+    const std::vector<OBJLoader::MeshData*>& getMeshes() { return this->meshes; };
+    const std::unordered_map<std::string, MaterialData*>& getMaterials() { return this->materials; };
 
     ~OBJLoader();
 };

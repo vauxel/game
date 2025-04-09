@@ -34,10 +34,10 @@ void Render::render(Shader* shader) {
 
     glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
 
-    shader->setUniformVec3("material.ambient", mesh.material.colorAmbientR, mesh.material.colorAmbientG, mesh.material.colorAmbientB);
-    shader->setUniformVec3("material.diffuse", mesh.material.colorDiffuseR, mesh.material.colorDiffuseG, mesh.material.colorDiffuseB);
-    shader->setUniformVec3("material.specular", mesh.material.colorSpecularR, mesh.material.colorSpecularG, mesh.material.colorSpecularB);
-    shader->setUniformFloat("material.shininess", mesh.material.shininess);
+    shader->setUniformVec3("material.ambient", mesh.materialData->colorAmbientR, mesh.materialData->colorAmbientG, mesh.materialData->colorAmbientB);
+    shader->setUniformVec3("material.diffuse", mesh.materialData->colorDiffuseR, mesh.materialData->colorDiffuseG, mesh.materialData->colorDiffuseB);
+    shader->setUniformVec3("material.specular", mesh.materialData->colorSpecularR, mesh.materialData->colorSpecularG, mesh.materialData->colorSpecularB);
+    shader->setUniformFloat("material.shininess", mesh.materialData->shininess);
 
     glVertexAttribPointer(
       0,

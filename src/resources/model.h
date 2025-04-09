@@ -9,31 +9,47 @@
 #include "util/logger.h"
 #include "resource.h"
 #include "model/vertex.h"
+#include "model/mesh.h"
 #include "util/obj_loader.h"
 
 class Model : public Resource {
-	public:
-		enum class LoadingMethod {
-			RAW,
-			OBJ
-		};
+  public:
+    enum class LoadingMethod {
+      RAW,
+      OBJ
+    };
 
-		int load();
-		void unload();
+    struct Mesh {
+      Mesh();
+      ~Mesh();
 
-		struct Mesh {
-			Mesh();
-			~Mesh();
+      void init(MeshData* meshData, MaterialData* matData);
 
-			void init(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
+      unsigned int vao, vbo, ebo;
+      unsigned int indicesCount;
 
-			unsigned int vao, vbo, ebo;
-			unsigned int indicesCount;
-			MaterialData material;
-		};
+      MeshData* meshData = nullptr;
+      MaterialData* materialData = nullptr;
+    };
 
-		Mesh* meshes;
-		unsigned int numMeshes = 0;
-	private:
-		int init(OBJLoader& objReader);
+    LoadingMethod loadingMethod;
+
+    Mesh* meshes;
+    unsigned int numMeshes = 0;
+
+    MaterialData** materials;
+    unsigned int numMaterials = 0;
+
+    Model() {
+      this->loadingMethod = LoadingMethod::RAW;
+    }
+
+    Model(LoadingMethod loadingMethod) {
+      this->loadingMethod = loadingMethod;
+    };
+
+    int load();
+    void unload();
+  private:
+    int initFromOBJ(OBJLoader& objReader);
 };
