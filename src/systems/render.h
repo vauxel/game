@@ -13,29 +13,29 @@
 #include "comp/render.h"
 
 class RenderSystem : public System {
-	private:
-		GLFWwindow* window;
-		Camera* camera;
-		glm::mat4 cameraMatrix;
-		glm::mat4 modelMatrix;
-		glm::mat3 modelNormalMatrix;
+  private:
+    GLFWwindow* window;
+    Camera* camera;
+    glm::mat4 cameraMatrix;
+    glm::mat4 modelMatrix;
+    glm::mat3 modelNormalMatrix;
 
-		void setCamera(Camera* cam);
-		void updateCameraMatrix(Camera* cam);
-		void updateModelMatrix(glm::vec3 pos, glm::quat rot);
-		void updateLightingUniforms();
-		void renderEntities();
-	public:
-		Shader* shader;
-		std::vector<Entity*> lights;
-		
-		RenderSystem(GLFWwindow* win, Camera* cam);
-		~RenderSystem();
+    void setCamera(Camera* cam);
+    void updateCameraMatrix(Camera* cam);
+    void updateModelMatrix(glm::vec3 pos, glm::quat rot);
+    void updateLightingUniforms();
+    void renderEntities();
+  public:
+    Shader* shader;
+    std::vector<Entity*> lights;
+    
+    RenderSystem(GLFWwindow* win, Camera* cam);
+    ~RenderSystem();
 
-		virtual void attachEntity(Entity* entity);
-		virtual void loop();
-		virtual void handleMessage(MessageType type, Message* msg);
-		void moveLight1ToCamera();
-		void moveLight2ToCamera();
-		void createNewLightAtCamera();
+    virtual void attachEntity(Entity* entity);
+    virtual void loop();
+    virtual void handleMessage(MessageType type, Message* msg);
+    void moveLight1ToCamera();
+    void moveLight2ToCamera();
+    void createNewLightAtCamera();
 };

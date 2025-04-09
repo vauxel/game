@@ -4,43 +4,43 @@
 #include "entity.h"
 
 struct Light : public Component {
-	enum Type: int {
-		DIRECTIONAL,
-		POINT,
-		SPOT
-	};
+  enum Type: int {
+    DIRECTIONAL,
+    POINT,
+    SPOT
+  };
 
-	Type type;
+  Type type;
 
-	glm::vec3 intensities;
-	float attenuation;
-	float ambientCoefficient;
+  glm::vec3 intensities;
+  float attenuation;
+  float ambientCoefficient;
 
-	float coneAngle;
-	glm::vec3 coneDirection;
+  float coneAngle;
+  glm::vec3 coneDirection;
 
-	// Directional
-	Light(
-		Type type,
-		glm::vec3 intensities,
-		float ambientCoefficient
-	): type(type), intensities(intensities), ambientCoefficient(ambientCoefficient) {};
+  // Directional
+  Light(
+    Type type,
+    glm::vec3 intensities,
+    float ambientCoefficient
+  ): type(type), intensities(intensities), ambientCoefficient(ambientCoefficient) {};
 
-	// Point
-	Light(
-		Type type,
-		glm::vec3 intensities,
-		float attenuation,
-		float ambientCoefficient
-	): type(type), intensities(intensities), attenuation(attenuation), ambientCoefficient(ambientCoefficient) {};
+  // Point
+  Light(
+    Type type,
+    glm::vec3 intensities,
+    float attenuation,
+    float ambientCoefficient
+  ): type(type), intensities(intensities), attenuation(attenuation), ambientCoefficient(ambientCoefficient) {};
 
-	// Spot
-	Light(
-		Type type,
-		glm::vec3 intensities,
-		float attenuation,
-		float ambientCoefficient,
-		float coneAngle,
-		glm::vec3 coneDirection
-	): type(type), intensities(intensities), attenuation(attenuation), ambientCoefficient(ambientCoefficient), coneAngle(coneAngle), coneDirection(coneDirection) {};
+  // Spot
+  Light(
+    Type type,
+    glm::vec3 intensities,
+    float attenuation,
+    float ambientCoefficient,
+    float coneAngle,
+    glm::vec3 coneDirection
+  ): type(type), intensities(intensities), attenuation(attenuation), ambientCoefficient(ambientCoefficient), coneAngle(coneAngle), coneDirection(coneDirection) {};
 };

@@ -12,7 +12,7 @@ int Model::load() {
     }
 
     ret = this->initFromOBJ(loader);
-  }
+  } else if (this->loadingMethod == LoadingMethod::NXM)
 
   if (ret == 0) {
     LOG_DEBUG("Model loaded: %s", resourcePath);

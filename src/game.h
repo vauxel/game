@@ -16,32 +16,32 @@
 #define LOG_LEVEL LOG_LVL_DEBUG
 
 class Game {
-	private:
-		static Game* _instance;
-		bool running = false;
-		ResourceManager* resourceManager;
-		EntityManager* entityManager;
-		InputHandler* inputHandler;
-		RenderSystem* renderSystem;
-		ControlSystem* controlSystem;
-		Camera* camera;
-		GLFWwindow* window;
+  private:
+    static Game* _instance;
+    bool running = false;
+    ResourceManager* resourceManager;
+    EntityManager* entityManager;
+    InputHandler* inputHandler;
+    RenderSystem* renderSystem;
+    ControlSystem* controlSystem;
+    Camera* camera;
+    GLFWwindow* window;
 
-		const unsigned int width = 1280;
-		const unsigned int height = 720;
+    const unsigned int width = 1280;
+    const unsigned int height = 720;
 
-		Game();
-		~Game();
+    Game();
+    ~Game();
 
-		void initGLFW();
-		void quit();
-		static void handleGLFWError(int error, const char* description);
-		static void handleInput(GLFWwindow* window, int key, int scancode, int action, int mods);
-		static void handleCursor(GLFWwindow* window, double xpos, double ypos);
-	public:
-		bool initialized = false;
+    void initGLFW();
+    void quit();
+    static void handleGLFWError(int error, const char* description);
+    static void handleInput(GLFWwindow* window, int key, int scancode, int action, int mods);
+    static void handleCursor(GLFWwindow* window, double xpos, double ypos);
+  public:
+    bool initialized = false;
 
-		static Game* instance();
-		void init();
-		void loop();
+    static Game* instance();
+    void init();
+    void loop();
 };

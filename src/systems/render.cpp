@@ -132,12 +132,12 @@ void RenderSystem::loop() {
 void RenderSystem::attachEntity(Entity* entity) {
   if (entity->has<Render>() && entity->has<Spatial>()) {
     LOG_DEBUG("Attached render entity [id=%d]", entity->getId());
-    entities.push_back(entity);
+    entities.emplace_back(entity);
   }
   
   if (entity->has<Light>()) {
     LOG_DEBUG("Attached light entity [id=%d]", entity->getId());
-    lights.push_back(entity);
+    lights.emplace_back(entity);
   }
 }
 

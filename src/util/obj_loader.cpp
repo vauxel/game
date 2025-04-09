@@ -76,7 +76,7 @@ int OBJLoader::loadOBJFile(const char* path) {
         this->flushMeshData(&currMesh);
       }
 
-      this->rawVertices.push_back(glm::vec3(x, y, z));
+      this->rawVertices.emplace_back(glm::vec3(x, y, z));
 
       continue;
     }
@@ -520,7 +520,7 @@ inline void OBJLoader::flushMeshData(OBJLoader::MeshData** mesh) {
 }
 
 inline void OBJLoader::flushMaterialData(MaterialData** material) {
-  this->materials.emplace((*material)->mtlName, *material);
+  this->materials.emplace((*material)->name, *material);
   *material = new MaterialData();
 }
 
@@ -562,12 +562,12 @@ int OBJLoader::loadMTLLib(const char* path) {
       token += 7;
       token += strspn(token, " \t");
 
-      if (currMaterial->mtlName != "") {
+      if (currMaterial->name != "") {
         this->flushMaterialData(&currMaterial);
       }
 
-      currMaterial->mtlName = std::string(token);
-      currMaterial->mtlName.pop_back(); // Remove newline character
+      currMaterial->name = std::string(token);
+      currMaterial->name.pop_back(); // Remove newline character
 
       continue;
     }
@@ -673,7 +673,7 @@ int OBJLoader::loadMTLLib(const char* path) {
     }
   }
 
-  this->materials.emplace(currMaterial->mtlName, currMaterial);
+  this->materials.emplace(currMaterial->name, currMaterial);
 
   auto t_end = std::chrono::high_resolution_clock::now();
   double elapsedTime = std::chrono::duration<double, std::milli>(t_end - t_start).count();

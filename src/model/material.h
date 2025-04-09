@@ -3,7 +3,7 @@
 #include <string>
 
 struct MaterialData {
-  std::string mtlName = "";
+  std::string name = "";
 
   float colorAmbientR = 0.2;
   float colorAmbientG = 0.2;

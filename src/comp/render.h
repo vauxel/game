@@ -8,9 +8,9 @@
 #include "resources/shader.h"
 
 struct Render : public Component {
-	Model* model;
-	Texture* texture;
+  Model* model;
+  Texture* texture;
 
-	Render(std::string modelName, std::string texName);
-	void render(Shader* shader);
+  Render(std::string modelName, std::string texName);
+  void render(Shader* shader);
 };

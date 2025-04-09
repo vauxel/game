@@ -12,7 +12,6 @@
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 #include <glm/geometric.hpp>
-#include <mapbox/earcut.hpp>
 #include "logger.h"
 #include "model/vertex.h"
 #include "model/material.h"

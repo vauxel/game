@@ -15,8 +15,8 @@
 class Model : public Resource {
   public:
     enum class LoadingMethod {
-      RAW,
-      OBJ
+      NXM, // Nexus Model
+      OBJ // Wavefront OBJ
     };
 
     struct Mesh {
@@ -41,7 +41,7 @@ class Model : public Resource {
     unsigned int numMaterials = 0;
 
     Model() {
-      this->loadingMethod = LoadingMethod::RAW;
+      this->loadingMethod = LoadingMethod::NXM;
     }
 
     Model(LoadingMethod loadingMethod) {

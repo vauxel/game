@@ -3,6 +3,6 @@
 #include "message.h"
 
 struct InputMsg : Message {
-	int keycode;
-	InputMsg(int keycode) : keycode(keycode) {};
+  int keycode;
+  InputMsg(int keycode) : keycode(keycode) {};
 };
