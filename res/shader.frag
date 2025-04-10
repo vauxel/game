@@ -14,7 +14,7 @@ in vec3 fragNormal;
 
 out vec4 fragColor;
 
-uniform sampler2D textureSampler;
+// uniform sampler2D textureSampler;
 
 uniform mat4 camera;
 uniform mat4 model;
@@ -55,10 +55,10 @@ vec3 calcLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, vec
 		}
 	}
 
-	vec3 ambient = surfaceColor.rgb * light.ambientCoefficient;
+	vec3 ambient = light.ambientCoefficient * material.ambient;
 
 	float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
-	vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.intensities;
+	vec3 diffuse = diffuseCoefficient * material.diffuse * light.intensities;
 
 	return ambient + attenuation * diffuse;
 }
