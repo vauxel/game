@@ -14,7 +14,7 @@ in vec3 fragNormal;
 
 out vec4 fragColor;
 
-// uniform sampler2D textureSampler;
+uniform sampler2D textureSampler;
 
 uniform mat4 camera;
 uniform mat4 model;
@@ -29,7 +29,6 @@ uniform struct Light {
 	vec3 position;
 	vec3 intensities;
 	float attenuation;
-	float ambientCoefficient;
 	float coneAngle;
 	vec3 coneDirection;
 } lights[MAX_LIGHTS];
@@ -49,23 +48,23 @@ vec3 calcLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, vec
 		// Spot light
 		if (light.type == 2) {
 			float lightToSurfaceAngle = degrees(acos(dot(-surfaceToLight, normalize(light.coneDirection))));
-			if (lightToSurfaceAngle > light.coneAngle){
+			if (lightToSurfaceAngle > light.coneAngle) {
 				attenuation = 0.0;
 			}
 		}
 	}
 
-	vec3 ambient = light.ambientCoefficient * material.ambient;
+	vec3 ambient = light.intensities * material.ambient;
 
 	float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
-	vec3 diffuse = diffuseCoefficient * material.diffuse * light.intensities;
+	vec3 diffuse = light.intensities * diffuseCoefficient * material.diffuse;
 
 	return ambient + attenuation * diffuse;
 }
 
 void main() {
 	vec3 normal = modelNormal * fragNormal;
-	vec3 surfacePos = vec3(model * vec4(fragPosition, 1));
+	vec3 surfacePos = vec3(model * vec4(fragPosition, 1.0));
 	vec4 surfaceColor = texture(textureSampler, fragUV);
 	vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);
 	

@@ -83,8 +83,7 @@ void Game::init() {
   light1->assign<Spatial>(glm::vec3(0.0f, 3.0f, 0.0f));
   light1->assign<Light>(
     Light::Type::POINT,
-    glm::vec3(2.0f, 2.0f, 2.0f),
-    1.0f,
+    glm::vec3(10.0f, 10.0f, 10.0f),
     1.0f
   );
 
@@ -94,7 +93,6 @@ void Game::init() {
     Light::Type::SPOT,
     glm::vec3(1.0f, 1.0f, 1.0f),
     0.5f,
-    0.0f,
     15.0f,
     glm::vec3(-1.0f, 0.0f, 0.0f)
   );
@@ -104,8 +102,7 @@ void Game::init() {
   light3->assign<Light>(
     Light::Type::POINT,
     glm::vec3(2.0f, 0.0f, 0.0f),
-    1.0f,
-    0.0f
+    1.0f
   );
 
   Entity* light4 = new Entity();
@@ -113,8 +110,7 @@ void Game::init() {
   light4->assign<Light>(
     Light::Type::POINT,
     glm::vec3(0.0f, 2.0f, 0.0f),
-    1.0f,
-    0.0f
+    1.0f
   );
 
   Entity* light5 = new Entity();
@@ -122,8 +118,7 @@ void Game::init() {
   light5->assign<Light>(
     Light::Type::POINT,
     glm::vec3(0.0f, 0.0f, 2.0f),
-    1.0f,
-    0.0f
+    1.0f
   );
 
   Entity* light6 = new Entity();
@@ -131,8 +126,7 @@ void Game::init() {
   light6->assign<Light>(
     Light::Type::POINT,
     glm::vec3(2.0f, 0.0f, 2.0f),
-    4.0f,
-    0.0f
+    4.0f
   );
 
   // entityManager->instantiate(statue);

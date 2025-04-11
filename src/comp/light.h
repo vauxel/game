@@ -14,7 +14,6 @@ struct Light : public Component {
 
   glm::vec3 intensities;
   float attenuation;
-  float ambientCoefficient;
 
   float coneAngle;
   glm::vec3 coneDirection;
@@ -22,25 +21,22 @@ struct Light : public Component {
   // Directional
   Light(
     Type type,
-    glm::vec3 intensities,
-    float ambientCoefficient
-  ): type(type), intensities(intensities), ambientCoefficient(ambientCoefficient) {};
+    glm::vec3 intensities
+  ): type(type), intensities(intensities) {};
 
   // Point
   Light(
     Type type,
     glm::vec3 intensities,
-    float attenuation,
-    float ambientCoefficient
-  ): type(type), intensities(intensities), attenuation(attenuation), ambientCoefficient(ambientCoefficient) {};
+    float attenuation
+  ): type(type), intensities(intensities), attenuation(attenuation) {};
 
   // Spot
   Light(
     Type type,
     glm::vec3 intensities,
     float attenuation,
-    float ambientCoefficient,
     float coneAngle,
     glm::vec3 coneDirection
-  ): type(type), intensities(intensities), attenuation(attenuation), ambientCoefficient(ambientCoefficient), coneAngle(coneAngle), coneDirection(coneDirection) {};
+  ): type(type), intensities(intensities), attenuation(attenuation), coneAngle(coneAngle), coneDirection(coneDirection) {};
 };
