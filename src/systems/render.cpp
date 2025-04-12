@@ -86,12 +86,6 @@ void RenderSystem::updateLightingUniforms() {
       lights[i]->get<Light>()->attenuation
     );
 
-    snprintf(uniformName, 99, "lights[%d].ambientCoefficient", i);
-    glUniform1f(
-      shader->getUniformLocation(uniformName),
-      lights[i]->get<Light>()->ambientCoefficient
-    );
-
     snprintf(uniformName, 99, "lights[%d].coneAngle", i);
     glUniform1f(
       shader->getUniformLocation(uniformName),
